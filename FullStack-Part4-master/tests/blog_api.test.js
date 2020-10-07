@@ -6,6 +6,7 @@ const api = supertest(app)
 
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const blog = require('../models/blog')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -24,7 +25,7 @@ describe('Blog model', () => {
         .expect('Content-Type', /application\/json/)
     })
 
-    test('there are five blogs', async () => {
+    test('there are four blogs', async () => {
       const response = await api.get('/api/blogs')
       expect(response.body.length).toBe(helper.initialBlogs.length)
     })
@@ -38,12 +39,10 @@ describe('Blog model', () => {
   describe('POST requests', () => {
     test('succeeds with valid data', async () => {
       const newBlog = {
-        _id: '5a422bc61b54a676234d17fc',
         title: 'Type wars',
         author: 'Robert C. Martin',
         url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
         likes: 2,
-        __v: 0
       }
 
       await api
@@ -82,10 +81,8 @@ describe('Blog model', () => {
 
     test('if backend responds with 400 if title and url are missing', async() => {
       const newBlog = {
-        _id: '5a422bc61b54a676234d17fc',
-        author: 'Robert C. Martin',
+        author: 'Samundra',
         likes: 2,
-        __v: 0
       }
 
       await api
@@ -93,33 +90,23 @@ describe('Blog model', () => {
         .send(newBlog)
         .expect(400)
 
-      const blogsAtEnd = await helper.blogsInDb()
-      const id = blogsAtEnd.map(n => n.id)
-      expect(id).not.toContain('5a422bc61b54a676234d17fc')
+      const response = await helper.blogsInDb()
+      expect(response).toHaveLength(helper.initialBlogs.length)
     })
   })
 
   describe('PUT requests', () => {
     test('succeeds with valid data', async () => {
-      // Update the blog from 12 to 1000 likes.
-      const updatedBlog = {
-        'title': 'Canonical string reduction',
-        'author': 'Edsger W. Dijkstra',
-        'url': 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
-        'likes': 1000
-      }
-
+      // Update the blog from 120 to 125 likes.
       const blogsAtStart = await helper.blogsInDb()
-      await api
-        .put(`/api/blogs/${blogsAtStart[2].id}`)
-        .send(updatedBlog)
-        .expect(201)
-        .expect('Content-Type', /application\/json/)
+      const blog = '5f7d91832f69e1a09f099260'
+      const updateBlog = { likes: 20 }
 
-      const blogsAtEnd = await helper.blogsInDb()
-      expect(blogsAtEnd.length).toBe(helper.initialBlogs.length)
-      const contents = blogsAtEnd.map(n => n.likes)
-      expect(contents).toContain(updatedBlog.likes)
+      const updatedBlog = await api
+        .put(`/api/blogs/${blog}`)
+        .send(updateBlog)
+        .expect(200)
+      expect(updatedBlog.body.likes).toBe(20)
     })
   })
 
@@ -133,133 +120,134 @@ describe('Blog model', () => {
         .expect(204)
 
       const blogsAtEnd = await helper.blogsInDb()
-      expect(blogsAtEnd.length).toBe(helper.initialBlogs.length - 1)
-      const contents = blogsAtEnd.map(r => r.id)
-      expect(contents).not.toContain(blogToDelete.id)
+      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
+
+      const author = blogsAtEnd.map(r => r.author)
+      expect(author).not.toContain(blogToDelete.author)
     })
   })
 })
 
-describe('User model', () => {
-  describe('GET requests', () => {
-    beforeEach(async () => {
-      await User.deleteMany({})
-      const user1 = new User({ username: 'user1', password: 'password1' })
-      const user2 = new User({ username: 'user2', password: 'password2' })
-      const user3 = new User({ username: 'user3', password: 'password3' })
-      await user1.save()
-      await user2.save()
-      await user3.save()
-    })
+// describe('User model', () => {
+//   describe('GET requests', () => {
+//     beforeEach(async () => {
+//       await User.deleteMany({})
+//       const user1 = new User({ username: 'user1', password: 'password1' })
+//       const user2 = new User({ username: 'user2', password: 'password2' })
+//       const user3 = new User({ username: 'user3', password: 'password3' })
+//       await user1.save()
+//       await user2.save()
+//       await user3.save()
+//     })
 
-    test('users are returned as json', async () => {
-      await api
-        .get('/api/users')
-        .expect(200)
-        .expect('Content-Type', /application\/json/)
-    })
+//     test('users are returned as json', async () => {
+//       await api
+//         .get('/api/users')
+//         .expect(200)
+//         .expect('Content-Type', /application\/json/)
+//     })
 
-    test('there are three users', async () => {
-      const response = await api.get('/api/users')
-      expect(response.body.length).toBe(3)
-    })
+//     test('there are three users', async () => {
+//       const response = await api.get('/api/users')
+//       expect(response.body.length).toBe(3)
+//     })
 
-    test('the unique identifier property of the user is named id', async () => {
-      const response = await api.get('/api/users')
-      expect(response.body[0].id).toBeDefined()
-    })
-  })
+//     test('the unique identifier property of the user is named id', async () => {
+//       const response = await api.get('/api/users')
+//       expect(response.body[0].id).toBeDefined()
+//     })
+//   })
 
-  describe('POST requests', () => {
-    beforeEach(async () => {
-      await User.deleteMany({})
-      const user = new User({ username: 'root', password: 'sekret' })
-      await user.save()
-    })
+//   describe('POST requests', () => {
+//     beforeEach(async () => {
+//       await User.deleteMany({})
+//       const user = new User({ username: 'root', password: 'sekret' })
+//       await user.save()
+//     })
 
-    test('creation succeeds with a fresh username', async () => {
-      const usersAtStart = await helper.usersInDb()
+//     test('creation succeeds with a fresh username', async () => {
+//       const usersAtStart = await helper.usersInDb()
 
-      const newUser = {
-        username: 'SamDha',
-        name: 'Samundra Dhakal',
-        password: 'SamDha',
-      }
+//       const newUser = {
+//         username: 'SamDha',
+//         name: 'Samundra Dhakal',
+//         password: 'SamDha',
+//       }
 
-      await api
-        .post('/api/users')
-        .send(newUser)
-        .expect(201)
-        .expect('Content-Type', /application\/json/)
+//       await api
+//         .post('/api/users')
+//         .send(newUser)
+//         .expect(201)
+//         .expect('Content-Type', /application\/json/)
 
-      const usersAtEnd = await helper.usersInDb()
-      expect(usersAtEnd.length).toBe(usersAtStart.length + 1)
+//       const usersAtEnd = await helper.usersInDb()
+//       expect(usersAtEnd.length).toBe(usersAtStart.length + 1)
 
-      const usernames = usersAtEnd.map(u => u.username)
-      expect(usernames).toContain(newUser.username)
-    })
+//       const usernames = usersAtEnd.map(u => u.username)
+//       expect(usernames).toContain(newUser.username)
+//     })
 
-    test('creation fails with proper statuscode and message if username already taken', async () => {
-      const usersAtStart = await helper.usersInDb()
+//     test('creation fails with proper statuscode and message if username already taken', async () => {
+//       const usersAtStart = await helper.usersInDb()
 
-      const newUser = {
-        username: 'SamDha',
-        name: 'Sandesh Dhakal',
-        password: 'SanDha',
-      }
+//       const newUser = {
+//         username: 'SamDha',
+//         name: 'Sandesh Dhakal',
+//         password: 'SanDha',
+//       }
 
-      const result = await api
-        .post('/api/users')
-        .send(newUser)
-        .expect(400)
-        .expect('Content-Type', /application\/json/)
+//       const result = await api
+//         .post('/api/users')
+//         .send(newUser)
+//         .expect(400)
+//         .expect('Content-Type', /application\/json/)
 
-      expect(result.body.error).toContain('`username` to be unique')
+//       expect(result.body.error).toContain('`username` to be unique')
 
-      const usersAtEnd = await helper.usersInDb()
-      expect(usersAtEnd.length).toBe(usersAtStart.length)
-    })
+//       const usersAtEnd = await helper.usersInDb()
+//       expect(usersAtEnd.length).toBe(usersAtStart.length)
+//     })
 
-    test('creation fails if username is smaller than 3 characters', async () => {
-      const usersAtStart = await helper.usersInDb()
+//     test('creation fails if username is smaller than 3 characters', async () => {
+//       const usersAtStart = await helper.usersInDb()
 
-      const newUser = {
-        username: 'SD',
-        name: 'Samundra Dhakal',
-        password: 'SamDha',
-      }
+//       const newUser = {
+//         username: 'SD',
+//         name: 'Samundra Dhakal',
+//         password: 'SamDha',
+//       }
 
-      const result = await api
-        .post('/api/users')
-        .send(newUser)
-        .expect(400)
-        .expect('Content-Type', /application\/json/)
+//       const result = await api
+//         .post('/api/users')
+//         .send(newUser)
+//         .expect(400)
+//         .expect('Content-Type', /application\/json/)
 
-      expect(result.body.error).toContain('is shorter than the minimum allowed length (3)')
+//       expect(result.body.error).toContain('is shorter than the minimum allowed length (3)')
 
-      const usersAtEnd = await helper.usersInDb()
-      expect(usersAtEnd.length).toBe(usersAtStart.length)
-    })
+//       const usersAtEnd = await helper.usersInDb()
+//       expect(usersAtEnd.length).toBe(usersAtStart.length)
+//     })
 
-    test('creation fails if password is smaller than 3 characters', async () => {
-      const usersAtStart = await helper.usersInDb()
+//     test('creation fails if password is smaller than 3 characters', async () => {
+//       const usersAtStart = await helper.usersInDb()
 
-      const newUser = {
-        username: 'SamDha',
-        name: 'Samundra Dhakal',
-        password: 'sa',
-      }
+//       const newUser = {
+//         username: 'SamDha',
+//         name: 'Samundra Dhakal',
+//         password: 'sa',
+//       }
 
-      const result = await api
-        .post('/api/users')
-        .send(newUser)
-        .expect(400)
+//       const result = await api
+//         .post('/api/users')
+//         .send(newUser)
+//         .expect(400)
 
-      const usersAtEnd = await helper.usersInDb()
-      expect(usersAtEnd.length).toBe(usersAtStart.length)
-    })
-  })
-})
+//       const usersAtEnd = await helper.usersInDb()
+//       expect(usersAtEnd.length).toBe(usersAtStart.length)
+//     })
+//   })
+// })
 
 afterAll(() => {
   mongoose.connection.close()
