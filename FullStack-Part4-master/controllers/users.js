@@ -9,16 +9,16 @@ usersRouter.get('/', async (req, res) => {
 
 usersRouter.post('/', async (req, res) => {
   if (req.body.password.length < 3) {
-    return res.status(400).send('Password length is shorter than 3').end()
+    return res.status(400).json({ error:'Password length is shorter than 3' }).end()
   }
   if (req.body.username.length < 3) {
-    return res.status(400).send('UserName length is shorter than 3').end()
+    return res.status(400).json({ error:'UserName length is shorter than 3' }).end()
   }
   const body = req.body
   const saltRounds = 10
   const user = await User.findOne({ username: body.username })
   if(user){
-    res.status(400).send('username should be unique and its already taken')
+    res.status(400).json({ error: '`username` to be unique' })
   } else {
     const passwordHash = await bcrypt.hash(body.password, saltRounds)
 
