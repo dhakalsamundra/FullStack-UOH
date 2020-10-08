@@ -9,7 +9,7 @@ blogRouter.get('/', async (request, response) => {
   response.status(200).send(blogs)
 })
 
-blogRouter.post('/', async (req, res, next) => {
+blogRouter.post('/', async (req, res) => {
   const data = req.body
 
   if(data.title === undefined && data.url === undefined) {
@@ -43,7 +43,7 @@ blogRouter.get('/:id', async (req, res) => {
   }
 })
 
-blogRouter.delete('/:id', async (req, res, next) => {
+blogRouter.delete('/:id', async (req, res) => {
   const blog = await Blog.findById(req.params.id)
   const decodedToken = jwt.verify(req.token, process.env.SECRET)
   if(blog && blog.user.toString() === decodedToken.id.toString()){
