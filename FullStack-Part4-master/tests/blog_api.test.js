@@ -15,11 +15,11 @@ beforeEach(async () => {
     name: 'admin',
     password: 'root',
   }
-  const SignInUser = await api.post('/api/users').send(user)
+  const signedUpUser = await api.post('/api/users').send(user)
 
   await Blog.deleteMany({})
   const blogObjects = helper.initialBlogs
-    .map(blog => new Blog({ ...blog, user: SignInUser.body.id }))
+    .map(blog => new Blog({ ...blog, user: signedUpUser.body.id }))
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
 })
@@ -57,11 +57,11 @@ describe('Blog model', () => {
         username: 'root',
         password: 'root'
       }
-      const SignInUser = await api.post('/').send(user)
+      const SignInUser = await api.post('/api/login').send(user)
 
       await api
         .post('/api/blogs')
-        .set('Authorization', 'Bearer '.concat(SignInUser.body.token))
+        .set('Authorization', `Bearer ${SignInUser.body.token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -86,7 +86,7 @@ describe('Blog model', () => {
         username: 'root',
         password: 'root'
       }
-      const SignInUser = await api.post('/').send(user)
+      const SignInUser = await api.post('/api/login').send(user)
 
       await api
         .post('/api/blogs')
@@ -105,9 +105,15 @@ describe('Blog model', () => {
         author: 'Samundra',
         likes: 2,
       }
+      const user = {
+        username: 'root',
+        password: 'root'
+      }
+      const SignInUser = await api.post('/api/login').send(user)
 
       await api
         .post('/api/blogs')
+        .set('Authorization', 'Bearer '.concat(SignInUser.body.token))
         .send(newBlog)
         .expect(400)
 
@@ -122,9 +128,15 @@ describe('Blog model', () => {
       const blogsAtStart = await helper.blogsInDb()
       const blog = '5f7d91832f69e1a09f099260'
       const updateBlog = { likes: 20 }
+      const user = {
+        username: 'root',
+        password: 'root'
+      }
+      const SignInUser = await api.post('/api/login').send(user)
 
       const updatedBlog = await api
         .put(`/api/blogs/${blog}`)
+        .set('Authorization', 'Bearer '.concat(SignInUser.body.token))
         .send(updateBlog)
         .expect(200)
       expect(updatedBlog.body.likes).toBe(20)
@@ -135,9 +147,15 @@ describe('Blog model', () => {
     test('succeeds with status code 204 if id is valid', async () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToDelete = blogsAtStart[0]
+      const user = {
+        username: 'root',
+        password: 'root'
+      }
+      const SignInUser = await api.post('/api/login').send(user)
 
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', 'Bearer '.concat(SignInUser.body.token))
         .expect(204)
 
       const blogsAtEnd = await helper.blogsInDb()
