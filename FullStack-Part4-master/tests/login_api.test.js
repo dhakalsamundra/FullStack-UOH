@@ -24,7 +24,7 @@ describe('while logging users with data', () => {
     }
 
     const user = await api
-      .post('/')
+      .post('/api/login')
       .send(validUser)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -39,7 +39,7 @@ describe('while logging users with data', () => {
     }
 
     const user = await api
-      .post('/')
+      .post('/api/login')
       .send(invalidUser)
       .expect(401)
       .expect('Content-Type', /application\/json/)
@@ -54,7 +54,7 @@ describe('while logging users with data', () => {
     }
 
     const errorMsg = await api
-      .post('/')
+      .post('/api/login')
       .send(invalidUser)
       .expect(401)
       .expect('Content-Type', /application\/json/)
@@ -69,7 +69,7 @@ describe('while logging users with data', () => {
     }
 
     const errorMsg = await api
-      .post('/')
+      .post('/api/login')
       .send(invalidUser)
       .expect(401)
       .expect('Content-Type', /application\/json/)
@@ -85,19 +85,7 @@ describe('logging user with missing data', () => {
     }
 
     await api
-      .post('/')
-      .send(missingUser)
-      .expect(401)
-      .expect('Content-Type', /application\/json/)
-  })
-
-  test('can not login without password', async () => {
-    const missingUser = {
-      username: 'root',
-    }
-
-    await api
-      .post('/')
+      .post('/api/login')
       .send(missingUser)
       .expect(401)
       .expect('Content-Type', /application\/json/)
