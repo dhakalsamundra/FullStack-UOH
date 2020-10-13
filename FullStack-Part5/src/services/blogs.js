@@ -6,4 +6,14 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-export default { getAll }
+const create = Object => {
+    const request = axios.post(baseUrl, Object)
+    return request.then(response => response.data)
+}
+
+const update = (id, Object)=> {
+    const request = axios.put(`${baseUrl}/${id}`, Object)
+    return request.then(response => response.data)
+}
+
+export default { getAll, create, update }
