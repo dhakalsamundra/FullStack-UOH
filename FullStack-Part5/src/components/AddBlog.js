@@ -1,8 +1,13 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 
 import blogService from '../services/blogs'
+import Notification from './Notification'
+
 const AddBlog = () => {
 
+  const [blogs, setBlogs] = useState([])
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
   const [newBlog, setNewBlog] = useState({
     author: '',
     url: '',
@@ -12,6 +17,11 @@ const AddBlog = () => {
 
   const { author, url, title, likes } = newBlog;
 
+  useEffect(() => {
+    blogService.getAll().then(blogs =>
+      setBlogs( blogs )
+    )  
+  }, [])
   const onChange = e =>
     setNewBlog({ ...newBlog, [e.target.name]: e.target.value });
 
@@ -23,10 +33,22 @@ const AddBlog = () => {
         title: title,
         likes: likes
     }
-    blogService.create(object).then(returnedBlog=>{ setNewBlog(newBlog.concat(returnedBlog))})
+    console.log('this is a new blogs', object)
+    blogService
+    .create(object)
+    .then(returnedBlog=>{ 
+      setBlogs(blogs.concat(returnedBlog))
+    setNewBlog('')
+    })
+    setSuccessMessage('New blog added successfully')
   };
 
   return (
+    <div>
+       <Notification
+        errorMessage={errorMessage}
+        successMessage={successMessage}
+      />
     <form onSubmit={onSubmit}>
       <h2>Add Blog</h2>
       <div><label>Title:</label><input
@@ -59,6 +81,7 @@ const AddBlog = () => {
       /></div><br></br>
       <button type="submit">Create</button>
     </form>
+    </div>
   );
 };
 
