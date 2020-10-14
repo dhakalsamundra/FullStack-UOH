@@ -3,11 +3,11 @@ import React, {useState} from 'react'
 import LogInService from '../services/login'
 import Notification from './Notification'
 import blogService from '../services/blogs'
-import AddBlog from './AddBlog'
 
 export default function Login() {
     const [input, setInput] = useState({username: '', password: ''})
     const [errorMessage, setErrorMessage] = useState(null)
+    const [successMessage, setSuccessMessage] = useState(null)
     const [user, setUser] = useState(null)
 
 
@@ -22,12 +22,16 @@ export default function Login() {
           const user = await LogInService.login({
             username, password,
           })
-          console.log('this is login user', user)
+          window.localStorage.setItem('token', JSON.stringify(user))
           blogService.setToken(user.token)
           setUser(user)
+          setSuccessMessage(`${user.name} login successfull`)
+          setTimeout(() => {
+            setSuccessMessage(null);
+          }, 5000);
           setInput('')
         } catch (exception) {
-          setErrorMessage('Invalid credentials')
+          setErrorMessage('Invalid credentials', 'success')
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
@@ -37,8 +41,10 @@ export default function Login() {
       return (
         <div>
           <h1>Login</h1>
-          <Notification message={errorMessage} />
-          {user !== null ? <AddBlog />: <div></div>}
+          <Notification
+        errorMessage={errorMessage}
+        successMessage={successMessage}
+      />
           <form onSubmit={handleLogIn}>
             <div>
               <label htmlFor='username'>UserName:</label>
