@@ -2,6 +2,8 @@ import React, {useState} from 'react'
 
 import LogInService from '../services/login'
 import Notification from './Notification'
+import blogService from '../services/blogs'
+import AddBlog from './AddBlog'
 
 export default function Login() {
     const [input, setInput] = useState({username: '', password: ''})
@@ -20,10 +22,12 @@ export default function Login() {
           const user = await LogInService.login({
             username, password,
           })
+          console.log('this is login user', user)
+          blogService.setToken(user.token)
           setUser(user)
           setInput('')
         } catch (exception) {
-          setErrorMessage('Wrong credentials')
+          setErrorMessage('Invalid credentials')
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
@@ -34,6 +38,7 @@ export default function Login() {
         <div>
           <h1>Login</h1>
           <Notification message={errorMessage} />
+          {user !== null ? <AddBlog />: <div></div>}
           <form onSubmit={handleLogIn}>
             <div>
               <label htmlFor='username'>UserName:</label>
