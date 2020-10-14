@@ -41,9 +41,9 @@ const App = () => {
       <Notification successMessage={successMessage} />
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} user={user} />
       )}
-      {user === null ? <Togglable buttonLabel = 'Login'><Login /> </Togglable>: <div><p>{user.name} logged in <button onClick={handleLogout}>logout</button></p><AddBlog /></div>}     
+      {user === null ? <Togglable buttonLabel = 'Login'><Login /> </Togglable>: <div><p>{user.name} logged in <button onClick={handleLogout}>logout</button></p><Togglable buttonLabel='Add Blog'><AddBlog /></Togglable></div>}     
     </div>
   )
 }
