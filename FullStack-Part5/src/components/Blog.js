@@ -23,7 +23,7 @@ const Blog = ({ blog, user }) => {
     {blog.title} written by {blog.author}
     {toggleButton ? (
       <div>
-        <button onClick={button}>Hide</button><EachBlog blog={blog} /></div>) : (
+        <button onClick={button}>Hide</button><EachBlog blog={blog} user={user}/></div>) : (
         <button onClick={button}>Show</button>)}
   </div>
 )
