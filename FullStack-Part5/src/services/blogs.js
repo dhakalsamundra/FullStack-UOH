@@ -17,9 +17,11 @@ const create = async Object => {
     return response.data
 }
 
-const update = (id, Object)=> {
-    const request = axios.put(`${baseUrl}/${id}`, Object)
-    return request.then(response => response.data)
+const update = ( Object)=> {
+  console.log('this is a id of user', Object.user)
+  const id = Object.id
+    const response = axios.put(`${baseUrl}/${id}`, Object)
+    return response.data
 }
 
 export default { getAll, create, update, setToken }
