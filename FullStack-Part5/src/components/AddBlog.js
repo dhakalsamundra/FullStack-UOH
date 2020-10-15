@@ -25,7 +25,7 @@ const AddBlog = () => {
   const onChange = e =>
     setNewBlog({ ...newBlog, [e.target.name]: e.target.value });
 
-  const onSubmit = e => {
+  const addBlog = e => {
     e.preventDefault()
     const object = {
         author: author,
@@ -49,7 +49,7 @@ const AddBlog = () => {
         errorMessage={errorMessage}
         successMessage={successMessage}
       />
-    <form onSubmit={onSubmit}>
+    <form onSubmit={addBlog}>
       <h2>Add Blog</h2>
       <div><label>Title:</label><input
         type='text'
