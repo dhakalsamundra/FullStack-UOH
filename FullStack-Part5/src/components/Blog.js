@@ -1,9 +1,7 @@
 import React, {useState} from 'react'
-import Togglable from './Togglable'
 import EachBlog from './EachBlog'
 
-const Blog = ({ blog, user }) => {
-
+const Blog = ({ blog, user, addLikes, handleDelete }) => {
   const [toggleButton, setToggleButton] = useState(false)
 
   const button = () => {
@@ -23,7 +21,7 @@ const Blog = ({ blog, user }) => {
     {blog.title} written by {blog.author}
     {toggleButton ? (
       <div>
-        <button onClick={button}>Hide</button><EachBlog blog={blog} user={user}/></div>) : (
+        <button onClick={button}>Hide</button><EachBlog {...{blog, addLikes, user, handleDelete}}/></div>) : (
         <button onClick={button}>Show</button>)}
   </div>
 )
