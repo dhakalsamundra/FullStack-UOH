@@ -1,14 +1,13 @@
 import React from 'react';
 
-//notification component
-const Notification = ({ errorMessage, successMessage }) => {
-  if (errorMessage === null && successMessage === null) {
+const Notification = ({ notification }) => {
+  if (notification === null) {
     return null;
   }
-  return errorMessage ? (
-    <div className='error'>{errorMessage}</div>
-  ) : (
-    <div className='success'>{successMessage}</div>
+  return (
+    <div className={notification.type}>
+      <p>{notification.message}</p>
+    </div>
   );
 };
 
