@@ -1,50 +1,21 @@
 import React, {useState} from 'react'
+import PropTypes from 'prop-types'
 
-import LogInService from '../services/login'
-import Notification from './Notification'
-import blogService from '../services/blogs'
-
-export default function Login() {
+export default function Login({loginUser}) {
     const [input, setInput] = useState({username: '', password: ''})
-    const [errorMessage, setErrorMessage] = useState(null)
-    const [successMessage, setSuccessMessage] = useState(null)
-    const [user, setUser] = useState(null)
-
-
     const {username, password} = input
 
     const onChange = e => setInput({ ...input, [e.target.name]: e.target.value });
 
     const handleLogIn = async (event) => {
         event.preventDefault()
-        
-        try {
-          const user = await LogInService.login({
-            username, password,
-          })
-          window.localStorage.setItem('token', JSON.stringify(user))
-          blogService.setToken(user.token)
-          setUser(user)
-          setSuccessMessage(`${user.name} login successfull`)
-          setTimeout(() => {
-            setSuccessMessage(null);
-          }, 5000);
-          setInput('')
-        } catch (exception) {
-          setErrorMessage('Invalid credentials', 'success')
-          setTimeout(() => {
-            setErrorMessage(null)
-          }, 5000)
-        }
+        loginUser(input)
+        setInput({username:'', password:''})
       }
       
       return (
         <div>
           <h1>Login</h1>
-          <Notification
-        errorMessage={errorMessage}
-        successMessage={successMessage}
-      />
           <form onSubmit={handleLogIn}>
             <div>
               <label htmlFor='username'>UserName:</label>
@@ -73,3 +44,11 @@ export default function Login() {
         </div>
       );
     };
+
+    Login.propTypes = {
+      handleSubmit: PropTypes.func.isRequired,
+      handleUsernameChange: PropTypes.func.isRequired,
+      handlePasswordChange: PropTypes.func.isRequired,
+      username: PropTypes.string.isRequired,
+      password: PropTypes.string.isRequired
+    }
