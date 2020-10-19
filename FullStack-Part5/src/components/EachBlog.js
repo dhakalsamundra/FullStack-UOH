@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function EachBlog({ blog, addLikes, handleDelete, user}) {
+export default function EachBlog({ blog, addLikes, handleDelete}) {
 
     const blogStyle = {
         paddingTop: 10,
@@ -9,10 +9,13 @@ export default function EachBlog({ blog, addLikes, handleDelete, user}) {
         borderWidth: 1,
         marginBottom: 5
       }
+    const handleLikes = (blog) => {
+      addLikes(blog)
+    }
   return (
     <div style={blogStyle}>
       <ul>
-        <li>Likes: {blog.likes}<button onClick={()=>addLikes(blog)}>Like</button></li>
+        <li>Likes: {blog.likes}<button onClick={()=>handleLikes(blog)}>Like</button></li>
         <li>Url: {blog.url}</li>
         <li>Title: {blog.title}</li>
         <li>Author: {blog.author}</li>
