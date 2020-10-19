@@ -61,8 +61,7 @@ const App = () => {
       handleNotification(message, 'success');
       setBlogs([...blogs, returnedBlog]);
     } catch (error) {
-      // const message = error.response.data.error;
-      const message = error
+      const message = error.response.data.error;
       handleNotification(message);
       setTimeout(() => {
         handleNotification(null);
@@ -71,7 +70,6 @@ const App = () => {
   };
 
   const handleDelete = async (toRemoveBlog) => {
-    console.log('delete this', toRemoveBlog)
     if (user === null) {
       handleNotification('Not Authorized');
       return setTimeout(() => {
@@ -120,10 +118,11 @@ const App = () => {
   };
 
   const addLikes = async (toUpdateBlog) => {
-    const returnedBlog = await blogService.update(toUpdateBlog);
+    const object = { ...toUpdateBlog, likes: toUpdateBlog.likes + 1 };
+    const returnedBlog = await blogService.update(object);
     const newBlogs = blogs.filter((blog) => blog.id !== toUpdateBlog.id);
-    const sortedBlogs = ([...newBlogs, returnedBlog]);
-    setBlogs(sortedBlogs);
+    const updatedBlogs = ([...newBlogs, returnedBlog]);
+    setBlogs(updatedBlogs);
   };
   return (
     <div>

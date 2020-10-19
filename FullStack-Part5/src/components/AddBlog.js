@@ -1,7 +1,7 @@
 import React, { useState} from 'react';
 
 
-const AddBlog = ({addNewBlog}) => {
+const AddBlog = ({ addNewBlog }) => {
 
   const [newBlog, setNewBlog] = useState({
     author: '',
