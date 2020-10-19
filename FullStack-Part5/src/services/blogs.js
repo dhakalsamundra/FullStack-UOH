@@ -36,5 +36,4 @@ const update = async (newObject) => {
   const response = await axios.put(baseUrl.concat(`/${id}`), newObject);
   return response.data;
 };
-
 export default { getAll, setToken, create, update, remove };

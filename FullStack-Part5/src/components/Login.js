@@ -1,5 +1,4 @@
 import React, {useState} from 'react'
-import PropTypes from 'prop-types'
 
 export default function Login({loginUser}) {
     const [input, setInput] = useState({username: '', password: ''})
@@ -45,10 +44,3 @@ export default function Login({loginUser}) {
       );
     };
 
-    Login.propTypes = {
-      handleSubmit: PropTypes.func.isRequired,
-      handleUsernameChange: PropTypes.func.isRequired,
-      handlePasswordChange: PropTypes.func.isRequired,
-      username: PropTypes.string.isRequired,
-      password: PropTypes.string.isRequired
-    }
