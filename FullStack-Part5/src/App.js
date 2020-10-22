@@ -54,7 +54,7 @@ const App = () => {
   };
 
   const addNewBlog = async (newBlog) => {
-    blogFormRef.current.toggleVisibility();
+    blogFormRef.current.toggleVisible();
     try {
       const returnedBlog = await blogService.create(newBlog);
       const message = `${returnedBlog.title} by ${returnedBlog.author} successfully added`;
@@ -118,8 +118,8 @@ const App = () => {
   };
 
   const addLikes = async (toUpdateBlog) => {
-    const object = { ...toUpdateBlog, likes: toUpdateBlog.likes + 1 };
-    const returnedBlog = await blogService.update(object);
+    toUpdateBlog = { ...toUpdateBlog, likes: toUpdateBlog.likes + 1 };
+    const returnedBlog = await blogService.update(toUpdateBlog);
     const newBlogs = blogs.filter((blog) => blog.id !== toUpdateBlog.id);
     const updatedBlogs = ([...newBlogs, returnedBlog]);
     setBlogs(updatedBlogs);
@@ -140,7 +140,7 @@ const App = () => {
       <h2>blogs</h2>
       {blogs.map((blog) => (
         <div key={blog.id}>
-          <Blog {...{ blog, addLikes, handleDelete, user }} />
+          <Blog {...{ blog, addLikes, handleDelete }} />
         </div>
       ))}
     </div>
