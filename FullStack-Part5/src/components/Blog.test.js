@@ -2,6 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { render, fireEvent } from '@testing-library/react';
 import Blog from './Blog';
+import EachBlog from './EachBlog'
 
 describe('<Blog />', () => {
   let component;
@@ -12,7 +13,8 @@ describe('<Blog />', () => {
     const blog = {
       author: 'Samundra',
       title: 'Software Testing',
-      url: 'test.com'
+      url: 'test.com',
+      likes: 120
     };
 
     component = render(<Blog blog={blog} handleChange={addLikes} />);
