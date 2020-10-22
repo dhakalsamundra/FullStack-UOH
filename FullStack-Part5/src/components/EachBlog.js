@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function EachBlog({ blog, addLikes, handleDelete}) {
+export default function EachBlog({ blog, addLikes, handleDelete, user}) {
 
     const blogStyle = {
         paddingTop: 10,
@@ -24,3 +24,4 @@ export default function EachBlog({ blog, addLikes, handleDelete}) {
     </div>
   )
 }
+
