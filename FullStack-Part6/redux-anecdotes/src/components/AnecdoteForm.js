@@ -1,15 +1,34 @@
-import React from 'react'
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { addAnecdote } from '../reducers/anecdoteReducer';
+import { setNotification } from '../reducers/notificationReducer';
 
-export default function AnecdoteForm() {
-    return (
-        <div>
-            <h2>Create New Note</h2>
-        <form>
-          <div>
-            <input />
-          </div>
-          <button>create</button>
-        </form>
-        </div>
-    )
-}
+const Form = () => {
+  const style = {
+    marginBottom: 10,
+  };
+
+  const dispatch = useDispatch();
+
+  const handleForm = async (event) => {
+    event.preventDefault();
+
+    const content = event.target.anecdote.value;
+    event.target.anecdote.value = '';
+
+    dispatch(addAnecdote(content));
+    dispatch(setNotification(`${content} added to the list`), 5);
+  };
+
+  return (
+    <div style={style}>
+      <h2>Create New</h2>
+      <form onSubmit={handleForm}>
+        <input name='anecdote' />
+        <button type='submit'>Add</button>
+      </form>
+    </div>
+  );
+};
+
+export default Form;
