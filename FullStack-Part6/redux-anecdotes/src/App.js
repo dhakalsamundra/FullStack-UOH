@@ -1,35 +1,30 @@
-import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { getAll } from './reducers/anecdoteReducer';
+
+import AnecdoteForm from './components/AnecdoteForm';
+import AnecdoteList from './components/AnecdoteList';
+import Notification from './components/Notification';
+import Filter from './components/Filter';
 
 const App = () => {
-  const anecdotes = useSelector(state => state)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const vote = (id) => {
-    console.log('vote', id)
-  }
+  useEffect(() => {
+    dispatch(getAll());
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div>
-      <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote =>
-        <div key={anecdote.id}>
-          <div>
-            {anecdote.content}
-          </div>
-          <div>
-            has {anecdote.votes}
-            <button onClick={() => vote(anecdote.id)}>vote</button>
-          </div>
-        </div>
-      )}
-      <h2>create new</h2>
-      <form>
-        <div><input /></div>
-        <button>create</button>
-      </form>
+      <Notification />
+      <h1>Anecdotes</h1>
+      <Filter />
+      <AnecdoteForm />
+      <AnecdoteList />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
