@@ -10,7 +10,7 @@
     "json-server": "^0.16.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "^3.4.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -37,5 +37,5 @@
   "devDependencies": {
     "terser-brunch": "^4.0.0"
   },
-  "proxy": "http://localhost:3001"
+  "proxy": "http://localhost:3002"
 }
