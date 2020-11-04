@@ -38,7 +38,7 @@ export default function Login({loginUser}) {
                 required
               />
             </div>
-            <button type='submit'>SignIn</button>
+            <button id="login-button" type='submit'>SignIn</button>
           </form>
         </div>
       );
