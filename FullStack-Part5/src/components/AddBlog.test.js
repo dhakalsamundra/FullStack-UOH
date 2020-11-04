@@ -14,9 +14,9 @@ describe('<AddBlog />', () => {
   test('all input feilds are rendered', () => {
     const form = component.container.querySelector('form');
 
-    const authorFeild = component.container.querySelector('#author');
-    const titleFeild = component.container.querySelector('#title');
-    const urlFeild = component.container.querySelector('#url');
+    const authorFeild = component.container.querySelector('#Author');
+    const urlFeild = component.container.querySelector('#Url');
+    const titleFeild = component.container.querySelector('#Title');
 
     fireEvent.change(authorFeild, {
       target: { value: 'Samundra' },
