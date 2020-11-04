@@ -5,6 +5,7 @@ import Blog from './Blog';
 import EachBlog from './EachBlog'
 
 describe('<Blog />', () => {
+
   let component;
   let addLikes;
 
@@ -13,8 +14,7 @@ describe('<Blog />', () => {
     const blog = {
       author: 'Samundra',
       title: 'Software Testing',
-      url: 'test.com',
-      likes: 120
+      url: 'test.com'
     };
 
     component = render(<Blog blog={blog} handleChange={addLikes} />);

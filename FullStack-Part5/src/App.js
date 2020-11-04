@@ -103,7 +103,7 @@ const App = () => {
 
   const loginForm = () => {
     return (
-      <Togglable buttonLabel='Login'>
+      <Togglable buttonLabel='Login' id="Login">
         <Login loginUser={loginUser} />
       </Togglable>
     );
@@ -118,7 +118,6 @@ const App = () => {
   };
 
   const addLikes = async (toUpdateBlog) => {
-    toUpdateBlog = { ...toUpdateBlog, likes: toUpdateBlog.likes + 1 };
     const returnedBlog = await blogService.update(toUpdateBlog);
     const newBlogs = blogs.filter((blog) => blog.id !== toUpdateBlog.id);
     const updatedBlogs = ([...newBlogs, returnedBlog]);
