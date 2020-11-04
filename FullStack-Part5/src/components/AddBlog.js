@@ -62,7 +62,7 @@ const AddBlog = ({ addNewBlog }) => {
         value={likes}
         onChange={onChange}
       /></div><br></br>
-      <button type="submit">Create</button>
+      <button id="addblog-btn"type="submit">Create</button>
     </form>
     </div>
   );
