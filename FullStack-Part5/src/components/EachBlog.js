@@ -10,7 +10,8 @@ export default function EachBlog({ blog, addLikes, handleDelete, user}) {
         marginBottom: 5
       }
     const handleLikes = (blog) => {
-      addLikes(blog)
+      const updatedBlog = {...blog, likes: blog.likes + 1}
+      addLikes(updatedBlog)
     }
   return (
     <div style={blogStyle}>
