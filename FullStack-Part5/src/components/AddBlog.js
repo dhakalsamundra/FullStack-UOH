@@ -27,19 +27,21 @@ const AddBlog = ({ addNewBlog }) => {
   };
 
   return (
-    <div>
+    <div className="form">
     <form onSubmit={addBlog}>
       <h2>Add Blog</h2>
       <div><label>Title:</label><input
         type='text'
         placeholder='title'
         name='title'
+        id="Title"
         value={title}
         onChange={onChange}
       /></div><br></br>
       <div><label>Url:</label><input
         type='text'
         placeholder='url'
+        id="Url"
         name='url'
         value={url}
         onChange={onChange}
@@ -48,6 +50,7 @@ const AddBlog = ({ addNewBlog }) => {
         type='text'
         placeholder='author'
         name='author'
+        id="Author"
         value={author}
         onChange={onChange}
       /></div><br></br>
@@ -55,6 +58,7 @@ const AddBlog = ({ addNewBlog }) => {
         type='number'
         placeholder='likes'
         name='likes'
+        id="Likes"
         value={likes}
         onChange={onChange}
       /></div><br></br>
