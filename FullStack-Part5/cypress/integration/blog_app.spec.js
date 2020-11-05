@@ -3,8 +3,8 @@ describe('Blog app', function(){
         cy.request('POST', 'http://localhost:3002/api/test/reset')
         const user = {
             name: 'Cypress',
-            username: 'Cypress',
-            password: 'Cypress'
+            username: 'AdminTest',
+            password: 'AdminTest'
         }
         cy.request('POST', 'http://localhost:3002/api/users/', user)
         cy.visit('http://localhost:3000')
@@ -15,26 +15,29 @@ describe('Blog app', function(){
     })
     it('valid user can be logged in', function () {
         cy.get('#togglable-btn').click()
-        cy.get('#username').type('Cypress')
-        cy.get('#password').type('Cypress')
+        cy.get('#username').type('AdminTest')
+        cy.get('#password').type('AdminTest')
         cy.get('#login-button').click()
     
-        cy.contains('Samundra logged in')
+        cy.contains('Cypress logged in')
       });
-      it('login user can be logged in', function () {
+      it('login fails with invalid credentials', function () {
         cy.get('#togglable-btn').click()
-        cy.get('#username').type('abc')
-        cy.get('#password').type('def')
+        cy.get('#username').type('abcdefg')
+        cy.get('#password').type('ijklmnop')
         cy.get('#login-button').click()
     
-        cy.contains('wrong credentials')
+        cy.get('.error').and('contain','Invalid credentials')
+            .and('have.css', 'color', 'rgb(255, 0, 0)')
+            .and('have.css', 'border-style', 'solid')
+        cy.get('html').should('not.contain', 'Cypress logged in')
       });
     
     describe('when logged in', function(){
         beforeEach(function(){
             cy.contains('Login').click()
-            cy.get('#username').type('Samundra')
-            cy.get('#password').type('Samundra')
+            cy.get('#username').type('AdminTest')
+            cy.get('#password').type('AdminTest')
             cy.get('#login-button').click()
           })
       
@@ -42,7 +45,7 @@ describe('Blog app', function(){
             cy.contains('Add Blog').click()
             cy.get('#Title').type('Cypress');
             cy.get('#Author').type('Samundra');
-            cy.get('#Url').type('cypress.com');
+            cy.get('#Url').type('abc.com');
             cy.get('#Likes').type(20);
             cy.get('#addblog-btn').click()
             cy.contains('Cypress')
