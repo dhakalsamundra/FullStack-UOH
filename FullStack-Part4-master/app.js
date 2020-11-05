@@ -30,6 +30,7 @@ app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 
 if (process.env.NODE_ENV === 'test') {
+  console.log('cypress',process.env.NODE_ENV)
   app.use('/api/test', testRouter)
 }
 app.use(middleware.unknownEndpoint)
