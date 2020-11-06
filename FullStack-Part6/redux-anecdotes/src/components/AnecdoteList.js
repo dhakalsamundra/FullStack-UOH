@@ -1,15 +1,12 @@
 import React from 'react';
 import Button from './Button';
-import { useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 
-const AnecdoteList = () => {
-  const data = useSelector((state) =>
-    state.data.sort((a, b) => b.votes - a.votes)
-  );
+const AnecdoteList = (props) => {
 
   return (
     <div>
-      {data.map((element) => {
+      {props.data.map((element) => {
         return (
           <div key={element.id}>
             {element.content}<br></br>
@@ -22,4 +19,24 @@ const AnecdoteList = () => {
   );
 };
 
-export default AnecdoteList;
+
+const mapStateToProps = (state) => {
+  if ( state.filteredData === 'ALL' ) {
+    return {
+      data: state.data
+    }
+  }
+
+  return {
+    data: (state.filteredData  === ' ' 
+    ? state.data.filter(data => data)
+    : state.data.filter(data => data)
+    )
+  }
+}
+
+const ConnectedNotes = connect(
+  mapStateToProps,
+)(AnecdoteList)
+
+export default ConnectedNotes 
