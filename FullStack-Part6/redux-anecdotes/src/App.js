@@ -14,7 +14,7 @@ const App = () => {
   useEffect(() => {
     dispatch(getAll());
     // eslint-disable-next-line
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>
