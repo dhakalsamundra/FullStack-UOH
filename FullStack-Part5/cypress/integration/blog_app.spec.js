@@ -77,20 +77,4 @@ describe("Blog app", function () {
            
         })
     })
-
-  describe("when logged in", function (){
-    beforeEach(function () {
-        cy.Login({ username: "root", password: "root" });
-      });
-    
-      it("a new blog can be created", function () {
-        cy.contains("Add Blog").click();
-        cy.get("#Title").type("testing");
-        cy.get("#Author").type("root");
-        cy.get("#Url").type("root.com");
-        cy.get("#Likes").type(20);
-        cy.get("#addblog-btn").click();
-        cy.contains("testing");
-      });
-  })
 })
