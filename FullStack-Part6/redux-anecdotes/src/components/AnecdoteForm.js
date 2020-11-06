@@ -4,8 +4,6 @@ import { addAnecdote } from '../reducers/anecdoteReducer';
 import { setNotification } from '../reducers/notificationReducer';
 
 const Form = (props) => {
-  console.log('this is create ', addAnecdote)
-  console.log('this is create ', props.addAnecdote)
   const style = {
     marginBottom: 10,
   };

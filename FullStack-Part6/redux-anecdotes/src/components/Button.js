@@ -1,20 +1,18 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { vote } from '../reducers/anecdoteReducer';
 import { setNotification } from '../reducers/notificationReducer';
 
-const Button = ( props,element) => {
-  element = props.element
+const Button = ({ element }) => {
+  console.log('sam', element)
+  const dispatch = useDispatch();
 
-  const handleClick = (element) => {
-    props.vote(element);
-    props.setNotification((`You had vote ${element.content}`, 5));
+  const handleClick = () => {
+    dispatch(vote(element));
+    dispatch(setNotification(`You had vote ${element.content}`, 5));
   };
 
-  return <button onClick={()=>handleClick(element)}>Vote</button>;
+  return <button onClick={handleClick}>Vote</button>;
 };
 
-export default connect(
-  null, 
-  {vote, setNotification}
-)(Button)
+export default Button;

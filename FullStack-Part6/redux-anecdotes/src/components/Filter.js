@@ -1,9 +1,9 @@
 import React from 'react';
 import Button from './Button';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { searchTerm, removeSearchTerm } from '../reducers/filterReducer';
 
-const DisplayFIlter = () => {
+const DisplayFilter = () => {
   const filteredData = useSelector(({ data, filteredData }) => {
     if (filteredData === null) {
       return [];
@@ -25,24 +25,27 @@ const DisplayFIlter = () => {
   );
 };
 
-const Filter = () => {
-  const dispatch = useDispatch();
+const Filter = (props) => {
 
   const handleChange = (event) => {
     const value = event.target.value;
 
     if (!value.length) {
-      return dispatch(removeSearchTerm());
+      return props.removeSearchTerm();
     }
-    dispatch(searchTerm(value));
+    props.searchTerm(value);
   };
 
   return (
     <div>
       <label>Filter</label>: <input onChange={handleChange} />
-      <DisplayFIlter />
+      <DisplayFilter />
     </div>
   );
 };
 
-export default Filter;
+export default connect(
+  null, 
+  {searchTerm, removeSearchTerm}
+)(Filter)
+

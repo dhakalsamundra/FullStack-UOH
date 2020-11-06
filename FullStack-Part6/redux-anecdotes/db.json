@@ -2,17 +2,17 @@
   "anecdotes": [
     {
       "content": "If it hurts, do it more often",
-      "votes": 22,
+      "votes": 84,
       "id": 1
     },
     {
       "content": "Adding manpower to a late software project makes it later!",
-      "votes": 27,
+      "votes": 35,
       "id": 2
     },
     {
       "content": "The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
-      "votes": 1,
+      "votes": 2,
       "id": 3
     },
     {
@@ -27,18 +27,28 @@
     },
     {
       "content": "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
-      "votes": 7,
+      "votes": 8,
       "id": 6
     },
     {
       "content": "Life is full of Struggle",
-      "votes": 3,
+      "votes": 4,
       "id": 7
     },
     {
       "content": "Redux , a king ",
-      "votes": 6,
+      "votes": 11,
       "id": 8
+    },
+    {
+      "content": "Javascript is the subset of Typescript",
+      "votes": 28,
+      "id": 9
+    },
+    {
+      "content": "Javascript is the subset of Typescript",
+      "votes": 43,
+      "id": 10
     }
   ]
 }
