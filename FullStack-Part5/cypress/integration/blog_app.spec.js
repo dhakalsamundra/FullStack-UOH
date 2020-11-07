@@ -2,7 +2,6 @@ describe("Blog app", function () {
     beforeEach(function () {
         cy.request('POST', 'http://localhost:3000/api/test/reset');
         cy.Register({ username: 'AdminTest', password: 'AdminTest', name: 'AdminTest' });
-        cy.Register({ username: 'root', password: 'root', name: 'root' });
         cy.visit('http://localhost:3000');
       });
 
@@ -11,11 +10,11 @@ describe("Blog app", function () {
   });
   it("valid user can be logged in", function () {
     cy.get("#togglable-btn").click();
-    cy.get("#username").type("root");
-    cy.get("#password").type("root");
+    cy.get("#username").type("AdminTest");
+    cy.get("#password").type("AdminTest");
     cy.get("#login-button").click();
 
-    cy.contains("root logged in");
+    cy.contains("AdminTest logged in");
 
   });
   
@@ -78,3 +77,4 @@ describe("Blog app", function () {
         })
     })
 })
+
