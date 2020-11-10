@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { useRouteMatch, Switch, Route, Redirect } from "react-router-dom";
 import About from "./Components/About";
 import CreateNew from "./Components/AddAnecdotes";
 import AnecdoteList from "./Components/Anecdotes";
+import EachAnecdote from "./Components/EachAnecdote";
 
 const Routes = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -39,6 +40,12 @@ const Routes = () => {
 
     setAnecdotes(anecdotes.map((a) => (a.id === id ? voted : a)));
   };
+
+  const match = useRouteMatch('/anecdotes/:id');
+  const data = match
+    ? anecdotes.find((ane) => ane.id === Number(match.params.id))
+    : null;
+
   return (
     <Switch>
       <Route exact path="/">
@@ -49,6 +56,9 @@ const Routes = () => {
       </Route>
       <Route exact path="/about">
         <About />
+      </Route>
+      <Route exact path="/anecdotes/:id">
+        {anecdoteById ? <EachAnecdote data={data} /> : <Redirect to='/'></Redirect>}
       </Route>
     </Switch>
   );
