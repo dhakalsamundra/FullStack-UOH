@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { useRouteMatch, Switch, Route, Redirect } from "react-router-dom";
+import { useRouteMatch, Switch, Route, Redirect} from "react-router-dom";
+
 import About from "./Components/About";
 import CreateNew from "./Components/AddAnecdotes";
 import AnecdoteList from "./Components/Anecdotes";
 import EachAnecdote from "./Components/EachAnecdote";
+import Notification from './Components/Notification'
 
 const Routes = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -22,6 +24,7 @@ const Routes = () => {
       id: 2,
     },
   ]);
+  const [notification, setNotification] = useState('')
 
   const addNew = (anecdote) => {
     anecdote.id = Number((Math.random() * 10000).toFixed(0));
@@ -50,9 +53,10 @@ const Routes = () => {
     <Switch>
       <Route exact path="/">
         <AnecdoteList anecdotes={anecdotes} />
+        <Notification notification={notification} />
       </Route>
       <Route exact path="/create">
-        <CreateNew addNew={addNew} />
+        <CreateNew addNew={addNew} setNotification={setNotification}/>
       </Route>
       <Route exact path="/about">
         <About />
