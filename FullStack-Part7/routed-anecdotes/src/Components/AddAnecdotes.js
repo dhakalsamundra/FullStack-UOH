@@ -1,10 +1,12 @@
-import React, { useState} from 'react'
+import React from 'react'
 import { useHistory } from 'react-router-dom'
+import  { useField } from '../hooks'
+
 
 const CreateNew = ({ addNew, setNotification }) => {
-    const [content, setContent] = useState('')
-    const [author, setAuthor] = useState('')
-    const [info, setInfo] = useState('')
+    const {  ...content } = useField('text')
+    const {  ...author } = useField('text')
+    const {  ...info } = useField('text')
 
     const history = useHistory()
   
@@ -17,31 +19,49 @@ const CreateNew = ({ addNew, setNotification }) => {
         votes: 0
       })
       setNotification(`A New Anecdote ${content} created.`)
-      console.log('this is a content', content)
       setTimeout(() => {
           setNotification('')
       }, 5000)
       history.push('/')
 
     }
+
+    const handleClear = () => {
+        content.reset('')
+        author.reset('')
+        info.reset('')
+      };
   
     return (
       <div>
         <h2>create a new anecdote</h2>
         <form onSubmit={handleSubmit}>
           <div>
-            content
-            <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+            content:
+            <input
+            value={content.value} 
+            type={content.type}
+            onChange={content.onChange}
+            />
           </div>
           <div>
-            author
-            <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+            author:
+            <input
+            value={author.value} 
+            type={author.type}
+            onChange={author.onChange}
+            />
           </div>
           <div>
-            url for more info
-            <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+            url for more info:
+            <input
+            value={info.value} 
+            type={info.type}
+            onChange={info.onChange}
+            />
           </div>
-          <button>create</button>
+          <button type="submit">create</button>
+          <button type="button" onClick={handleClear}>reset</button>
         </form>
       </div>
     )
