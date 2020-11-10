@@ -27,10 +27,16 @@ const Routes = () => {
   const [notification, setNotification] = useState('')
 
   const addNew = (anecdote) => {
+      if(anecdote){
     anecdote.id = Number((Math.random() * 10000).toFixed(0));
     setAnecdotes(anecdotes.concat(anecdote));
-  };
-
+  } else {
+    setNotification('Please fill the data before creating..')
+    setTimeout(() => {
+        setNotification('')
+    }, 5000)
+  }
+  }
   const anecdoteById = (id) => anecdotes.find((a) => a.id === id);
 
   const vote = (id) => {
@@ -52,8 +58,8 @@ const Routes = () => {
   return (
     <Switch>
       <Route exact path="/">
-        <AnecdoteList anecdotes={anecdotes} />
         <Notification notification={notification} />
+        <AnecdoteList anecdotes={anecdotes} />
       </Route>
       <Route exact path="/create">
         <CreateNew addNew={addNew} setNotification={setNotification}/>
@@ -62,7 +68,7 @@ const Routes = () => {
         <About />
       </Route>
       <Route exact path="/anecdotes/:id">
-        {anecdoteById ? <EachAnecdote data={data} /> : <Redirect to='/'></Redirect>}
+        {data ? <EachAnecdote data={data} /> : <Redirect to='/'></Redirect>}
       </Route>
     </Switch>
   );

@@ -11,13 +11,13 @@ const CreateNew = ({ addNew, setNotification }) => {
     const handleSubmit = (e) => {
       e.preventDefault()
       addNew({
-        content: content.value,
-        author: author.value,
-        info: info.value,
+        content,
+        author,
+        info,
         votes: 0
       })
-      setNotification(`A New Anecdote ${content.value} created.`)
-      console.log('this is a content', content.value)
+      setNotification(`A New Anecdote ${content} created.`)
+      console.log('this is a content', content)
       setTimeout(() => {
           setNotification('')
       }, 5000)
