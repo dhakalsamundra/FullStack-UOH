@@ -3,7 +3,7 @@ import { useRouteMatch, Switch, Route, Redirect} from "react-router-dom";
 
 import About from "./Components/About";
 import CreateNew from "./Components/AddAnecdotes";
-import AnecdoteList from "./Components/Anecdotes";
+import AnecdoteList from "./Components/AnecdoteList";
 import EachAnecdote from "./Components/EachAnecdote";
 import Notification from './Components/Notification'
 
@@ -26,29 +26,6 @@ const Routes = () => {
   ]);
   const [notification, setNotification] = useState('')
 
-  const addNew = (anecdote) => {
-      if(anecdote){
-    anecdote.id = Number((Math.random() * 10000).toFixed(0));
-    setAnecdotes(anecdotes.concat(anecdote));
-  } else {
-    setNotification('Please fill the data before creating..')
-    setTimeout(() => {
-        setNotification('')
-    }, 5000)
-  }
-  }
-  const anecdoteById = (id) => anecdotes.find((a) => a.id === id);
-
-  const vote = (id) => {
-    const anecdote = anecdoteById(id);
-
-    const voted = {
-      ...anecdote,
-      votes: anecdote.votes + 1,
-    };
-
-    setAnecdotes(anecdotes.map((a) => (a.id === id ? voted : a)));
-  };
 
   const match = useRouteMatch('/anecdotes/:id');
   const data = match
@@ -59,10 +36,10 @@ const Routes = () => {
     <Switch>
       <Route exact path="/">
         <Notification notification={notification} />
-        <AnecdoteList anecdotes={anecdotes} />
+        <AnecdoteList anecdote={anecdotes} />
       </Route>
       <Route exact path="/create">
-        <CreateNew addNew={addNew} setNotification={setNotification}/>
+        <CreateNew anecdotes={anecdotes} setAnecdotes={setAnecdotes} setNotification={setNotification}/>
       </Route>
       <Route exact path="/about">
         <About />
