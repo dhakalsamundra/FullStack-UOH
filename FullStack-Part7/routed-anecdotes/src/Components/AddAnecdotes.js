@@ -42,6 +42,7 @@ const CreateNew = ({ addNew, setNotification }) => {
             value={content.value} 
             type={content.type}
             onChange={content.onChange}
+            reset={content.reset}
             />
           </div>
           <div>
@@ -50,6 +51,7 @@ const CreateNew = ({ addNew, setNotification }) => {
             value={author.value} 
             type={author.type}
             onChange={author.onChange}
+            reset={author.reset}
             />
           </div>
           <div>
@@ -58,6 +60,7 @@ const CreateNew = ({ addNew, setNotification }) => {
             value={info.value} 
             type={info.type}
             onChange={info.onChange}
+            reset={info.reset}
             />
           </div>
           <button type="submit">create</button>
