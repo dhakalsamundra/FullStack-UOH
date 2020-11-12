@@ -1,11 +1,25 @@
 const path = require('path')
+const webpack = require('webpack')
 
-const config = {
+const config = ( env, argv ) => {
+
+  const backend_url = argv.mode === 'production'
+    ? 'https://blooming-atoll-75500.herokuapp.com/api/notes'
+    : 'http://localhost:3001/api/notes'
+
+  return {
   entry: ['@babel/polyfill', './src/index.js'],
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'main.js'
   },
+  devServer: {
+    contentBase: path.resolve(__dirname, 'build'),
+    compress: true,
+    port: 3000,
+  },
+  devtool: 'source-map',
+
   //Configuring the loders to transform the JSX code inot regular JavaScript
   module: {
     rules: [
@@ -24,5 +38,11 @@ const config = {
       },
     ],
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      BACKEND_URL: JSON.stringify(backend_url)
+    })
+  ],
+}
 }
 module.exports = config
