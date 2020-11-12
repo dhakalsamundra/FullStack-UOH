@@ -16,6 +16,12 @@ const config = {
           presets: ['@babel/preset-react', '@babel/preset-env'],
         },
       },
+      // css loader is used to load the css file
+      //style loader is used to generate and inject a style element that contain all the styles of the application
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
     ],
   },
 }
