@@ -1,7 +1,7 @@
-import App from './App';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-const hello = name => {
-  console.log(`hello ${name}`)
-}
+import App from './App'
+import './index.css'
 
-App()
+ReactDOM.render(<App />, document.getElementById('root'))
