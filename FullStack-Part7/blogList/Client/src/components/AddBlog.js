@@ -1,79 +1,47 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 
-const AddBlog = ({ addNewBlog }) => {
-  const [newBlog, setNewBlog] = useState({
-    author: '',
-    url: '',
-    title: '',
-    likes: 0,
-  })
+import { addBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
+import { useFeild } from '../hooks'
 
-  const { author, url, title, likes } = newBlog
+const AddBlog = () => {
+  const dispatch = useDispatch()
+  const history = useHistory()
 
-  const onChange = (e) =>
-    setNewBlog({ ...newBlog, [e.target.name]: e.target.value })
+  const [title, setTitle] = useFeild('text')
+  const [author, setAuthor] = useFeild('text')
+  const [url, setUrl ] = useFeild('text')
+  const [ likes, setLikes] = useFeild('number')
 
-  const addBlog = (e) => {
+
+  const handleSubmit = async(e) => {
     e.preventDefault()
-    addNewBlog(newBlog)
-    setNewBlog({
-      author: '',
-      url: '',
-      title: '',
-      likes: 0,
-    })
+    try {
+      await dispatch(addBlog({ title, author, likes, url }))
+      setTitle.clear()
+      setAuthor.clear()
+      setUrl.clear()
+      setLikes.clear()
+
+      history.push('/')
+      dispatch(setNotification('Blog Added', 5))
+    } catch (error) {
+      const message = error.response.data.error
+      dispatch(setNotification(message, 5, 'error'))
+    }
   }
 
   return (
     <div className='form'>
-      <form onSubmit={addBlog}>
+      <form onSubmit={handleSubmit}>
         <h2>Add Blog</h2>
         <div>
-          <label>Title:</label>
-          <input
-            type='text'
-            placeholder='title'
-            name='title'
-            id='Title'
-            value={title}
-            onChange={onChange}
-          />
-        </div>
-        <br></br>
-        <div>
-          <label>Url:</label>
-          <input
-            type='text'
-            placeholder='url'
-            id='Url'
-            name='url'
-            value={url}
-            onChange={onChange}
-          />
-        </div>
-        <br></br>
-        <div>
-          <label>Author:</label>
-          <input
-            type='text'
-            placeholder='author'
-            name='author'
-            id='Author'
-            value={author}
-            onChange={onChange}
-          />
-        </div>
-        <br></br>
-        <div>
-          <label>Likes:</label>
-          <input
-            type='number'
-            placeholder='likes'
-            name='likes'
-            id='Likes'
-            value={likes}
-            onChange={onChange}
-          />
+          <input value={title} { ...setTitle} placeholder='title' /><br/>
+          <input value={author} { ...setAuthor} placeholder='author' />
+          <input value={url} { ...setUrl} placeholder='url' />
+          <input value={likes} { ...setLikes} placeholder='likes' />
         </div>
         <br></br>
         <button id='addblog-btn' type='submit'>
