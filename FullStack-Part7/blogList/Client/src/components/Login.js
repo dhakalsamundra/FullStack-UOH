@@ -1,45 +1,37 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 
-export default function Login({ loginUser }) {
-  const [input, setInput] = useState({ username: '', password: '' })
-  const { username, password } = input
+import { loginUser } from '../reducers/userReducer'
+import { setNotification } from '../reducers/notificationReducer'
+import { useFeild } from '../hooks'
 
-  const onChange = (e) =>
-    setInput({ ...input, [e.target.name]: e.target.value })
+export default function Login() {
+  const history = useHistory()
+  const dispatch = useDispatch()
+
+  const [username, setUserName] = useFeild('text')
+  const [password, setPassword] = useFeild('password')
 
   const handleLogIn = async (event) => {
     event.preventDefault()
-    loginUser(input)
-    setInput({ username: '', password: '' })
+    setUserName.clear()
+    setPassword.clear()
+    try {
+      await dispatch(loginUser({ username, password }))
+      history.push('/')
+    } catch (error) {
+      const message = error.response.data.error
+      dispatch(setNotification(message, 5, 'error'))
+    }
   }
 
   return (
     <div>
       <h1>Login</h1>
       <form onSubmit={handleLogIn}>
-        <div>
-          <label htmlFor='username'>UserName:</label>
-          <input
-            id='username'
-            type='username'
-            name='username'
-            value={username}
-            onChange={onChange}
-            required
-          />
-        </div>
-        <br></br>
-        <div>
-          <label htmlFor='password'>Password</label>
-          <input
-            id='password'
-            type='password'
-            name='password'
-            value={password}
-            onChange={onChange}
-            required
-          />
-        </div>
+        <input value={username} { ...setUserName} placeholder='UserName' /><br/>
+        <input value={password} { ...setPassword} placeholder='Password' />
         <button id='login-button' type='submit'>
           SignIn
         </button>
