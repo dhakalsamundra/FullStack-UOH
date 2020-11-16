@@ -1,33 +1,27 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { useRouteMatch, Switch, Route } from 'react-router-dom'
+
 import EachBlog from './EachBlog'
+import Blogs from './Blogs'
 
-const Blog = ({ blog, user, addLikes, handleDelete }) => {
-  const [toggleButton, setToggleButton] = useState(false)
+const Blog = () => {
+  const { path } = useRouteMatch()
+  const blogs = useSelector((state) => state.blogs)
+  console.log('this is samundra blog', blogs)
 
-  const button = () => {
-    setToggleButton(!toggleButton)
-  }
+  const match = useRouteMatch('/blogs/:id')
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
+  const blog = match
+    ? blogs.find((blog) => blog.id === String(match.params.id))
+    : null
+
 
   return (
-    <div style={blogStyle} className='blog'>
-      {blog.title} written by {blog.author}
-      {toggleButton ? (
-        <div>
-          <button onClick={button}>Hide</button>
-          <EachBlog {...{ blog, addLikes, user, handleDelete }} />
-        </div>
-      ) : (
-        <button onClick={button}>Show</button>
-      )}
-    </div>
+    <Switch>
+      <Route exact path='/blogs/:id'><EachBlog blog={blog} /></Route>
+      <Route path={path}><Blogs blogs={blogs} /></Route>
+    </Switch>
   )
 }
 
