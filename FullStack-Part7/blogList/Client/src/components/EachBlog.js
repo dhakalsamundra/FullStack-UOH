@@ -1,6 +1,14 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 
-export default function EachBlog({ blog, addLikes, handleDelete }) {
+import { deleteBlog, likeBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
+
+export default function EachBlog({ blog }) {
+  const dispatch = useDispatch()
+  const history = useHistory()
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -8,22 +16,44 @@ export default function EachBlog({ blog, addLikes, handleDelete }) {
     borderWidth: 1,
     marginBottom: 5,
   }
-  const handleLikes = (blog) => {
-    const updatedBlog = { ...blog, likes: blog.likes + 1 }
-    addLikes(updatedBlog)
+
+  const handleDeleteBlog = async () => {
+    try {
+      await dispatch(deleteBlog(blog))
+      history.push('/')
+      dispatch(setNotification('blog removed sucessfully', 5))
+      dispatch(setNotification('removed', 5, 'error'))
+    } catch (error) {
+      const message = error.response.data.error
+      dispatch(setNotification(message, 5, 'error'))
+    }
+  }
+
+  if (!blog) {
+    return null
+  }
+
+  const addLike = async () => {
+    const toUpdateBlog = { ...blog, likes: blog.likes + 1 }
+    try {
+      await dispatch(likeBlog(toUpdateBlog))
+    } catch (error) {
+      const message = error.response.data.error
+      dispatch(setNotification(message, 5, 'error'))
+    }
   }
   return (
     <div style={blogStyle} className='blogStyle'>
       <ul>
         <li>
           Likes: {blog.likes}
-          <button onClick={() => handleLikes(blog)}>Like</button>
+          <button onClick={() => addLike(blog)}>Like</button>
         </li>
         <li>Url: {blog.url}</li>
         <li>Title: {blog.title}</li>
         <li>Author: {blog.author}</li>
       </ul>
-      <button onClick={() => handleDelete(blog)}>Delete</button>
+      <button onClick={() => handleDeleteBlog(blog)}>Delete</button>
     </div>
   )
 }
