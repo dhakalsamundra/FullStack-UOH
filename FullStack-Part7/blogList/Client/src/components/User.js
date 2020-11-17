@@ -24,8 +24,8 @@ const User = () => {
   return (
     <div>
       <Switch>
-        <Route path={`${path}/:id`}><EachUser {...user} /></Route>
-        <Route path={path}><Users users={users} /></Route>
+        <Route exact path={`${path}/:id`}><EachUser {...user} /></Route>
+        <Route exact path={path}><Users users={users} /></Route>
       </Switch>
     </div>
   )
