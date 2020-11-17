@@ -9,6 +9,7 @@ import Notification from './components/Notification'
 import { setUser } from './reducers/userReducer'
 import { getAll } from './reducers/blogReducer'
 import NavBar from './components/NavBar'
+import User from './components/User'
 
 const Routes = () => {
   const dispatch = useDispatch()
@@ -21,9 +22,10 @@ const Routes = () => {
       <NavBar />
       <Notification />
       <Switch>
-        <Route exact path='/' component={Blog} />
+        <Route  path='/' component={Blog} />
         <Route exact path='/login' component={Login} />
         <Route exact path='/create' component={AddBlog} />
+        <Route exact path='/users' component={User} />
       </Switch>
     </div>
   )
