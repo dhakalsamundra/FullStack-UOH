@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import Comment from './Comment'
 
 export default function EachBlog({ blog }) {
   const dispatch = useDispatch()
@@ -54,6 +55,14 @@ export default function EachBlog({ blog }) {
         <li>Author: {blog.author}</li>
       </ul>
       <button onClick={() => handleDeleteBlog(blog)}>Delete</button>
+      <div>
+        <Comment blog={blog} />
+      </div>
+      <div>
+        {blog.comments.map((comment) => (
+          <h6 key={comment.id}>{ comment.content }</h6>
+        ))}
+      </div>
     </div>
   )
 }
