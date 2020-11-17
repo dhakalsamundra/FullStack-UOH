@@ -22,10 +22,10 @@ const Routes = () => {
       <NavBar />
       <Notification />
       <Switch>
-        <Route  path='/' component={Blog} />
         <Route exact path='/login' component={Login} />
         <Route exact path='/create' component={AddBlog} />
         <Route exact path='/users' component={User} />
+        <Route  path='/' component={Blog} />
       </Switch>
     </div>
   )
