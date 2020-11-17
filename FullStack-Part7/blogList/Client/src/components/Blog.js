@@ -8,7 +8,6 @@ import Blogs from './Blogs'
 const Blog = () => {
   const { path } = useRouteMatch()
   const blogs = useSelector((state) => state.blogs)
-  console.log('this is samundra blog', blogs)
 
   const match = useRouteMatch('/blogs/:id')
 
