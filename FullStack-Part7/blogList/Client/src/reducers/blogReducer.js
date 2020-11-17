@@ -64,4 +64,11 @@ export const likeBlog = (blog) => {
   }
 }
 
+export const commentBlog = (blog) => {
+  return async (dispatch) => {
+    const response = await blogService.comment(blog)
+    dispatch({ type: 'UPDATE_BLOG', data: response })
+  }
+}
+
 export default reducer
