@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 
 const Blog = require('../models/blog')
 const User = require('../models/user')
+// const Comment = require('../models/comments')
 
 blogRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
@@ -42,6 +43,43 @@ blogRouter.get('/:id', async (req, res) => {
     res.status(404).end()
   }
 })
+
+blogRouter.post('/:id/comments', async (req, res) => {
+  const { id } = req.params
+
+  const data = req.body
+
+  if (data.content === undefined) {
+    res.status(400).end()
+  }
+  // const comment = new Comment({
+  //   content: data.content,
+  //   blog: id
+  // })
+
+  const { content } = req.body
+  const blog = await Blog.findById(id)
+
+  if (!blog) {
+    return res.send({ message: 'not found' })
+  } else {
+    const decodedToken = jwt.verify(req.token, process.env.SECRET)
+    if (!req.token || !decodedToken.id) {
+      return res.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    blog.comments = blog.comments.concat({ content })
+
+    const savedBlog = await blog.save()
+    const populatedBlog = await savedBlog
+      .populate('user', {
+        username: 1,
+        name: 1,
+      })
+      .execPopulate()
+
+    res.status(201).send(populatedBlog)
+  }})
 
 blogRouter.delete('/:id', async (req, res) => {
   const blog = await Blog.findById(req.params.id)
