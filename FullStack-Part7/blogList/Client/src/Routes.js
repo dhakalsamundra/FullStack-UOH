@@ -1,22 +1,15 @@
-import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 import Blog from './components/Blog'
 import Login from './components/Login'
 import AddBlog from './components/AddBlog'
 import Notification from './components/Notification'
-import { setUser } from './reducers/userReducer'
-import { getAll } from './reducers/blogReducer'
 import NavBar from './components/NavBar'
 import User from './components/User'
 
 const Routes = () => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(getAll())
-    dispatch(setUser())
-  })
+
   return (
     <div>
       <NavBar />
