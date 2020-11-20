@@ -1,6 +1,10 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import { Typography, Paper, List, ListItem, IconButton } from '@material-ui/core'
+import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt'
+import DeleteIcon from '@material-ui/icons/Delete'
+import { useSnackbar } from 'notistack'
 
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
@@ -9,21 +13,15 @@ import Comment from './Comment'
 export default function EachBlog({ blog }) {
   const dispatch = useDispatch()
   const history = useHistory()
+  const { enqueueSnackbar } = useSnackbar()
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
 
   const handleDeleteBlog = async () => {
     try {
-      await dispatch(deleteBlog(blog))
+      const dialog = window.confirm('Do you confirm that you want to delete this blog?')
+      if(dialog) await dispatch(deleteBlog(blog))
       history.push('/')
-      dispatch(setNotification('blog removed sucessfully', 5))
-      dispatch(setNotification('removed', 5, 'error'))
+      enqueueSnackbar('Blog Deleted', { variant: 'success' })
     } catch (error) {
       const message = error.response.data.error
       dispatch(setNotification(message, 5, 'error'))
@@ -44,25 +42,33 @@ export default function EachBlog({ blog }) {
     }
   }
   return (
-    <div style={blogStyle} className='blogStyle'>
-      <ul>
-        <li>
-          Likes: {blog.likes}
-          <button onClick={() => addLike(blog)}>Like</button>
-        </li>
-        <li>Url: {blog.url}</li>
-        <li>Title: {blog.title}</li>
-        <li>Author: {blog.author}</li>
-      </ul>
-      <button onClick={() => handleDeleteBlog(blog)}>Delete</button>
-      <div>
+    <Paper className='blog' elevation={3}>
+      <div className='blogStyle'>
+        <Typography variant='h4' color='primary'>
+          Title: {blog.title}
+        </Typography>
+        <Typography variant='h4' color='textSecondary'>
+          Url: {blog.url}
+        </Typography>
+        <Typography variant='h4' color='textSecondary'>
+          Author: {blog.author}
+        </Typography>
+        <Typography variant='h4' color='textSecondary'>
+          <ThumbUpAltIcon />: {blog.likes}
+        </Typography>
+        <Typography variant='h4' color='textSecondary'>
+          Added By:{blog.user.name}
+        </Typography>
+        <IconButton onClick={() => handleDeleteBlog(blog)} aria-label='like Button'><DeleteIcon /></IconButton>
+        <IconButton onClick={() => addLike(blog)} aria-label='delete blog'><ThumbUpAltIcon /></IconButton>
         <Comment blog={blog} />
       </div>
-      <div>
+      <Typography variant='h5' color='primary'>Comments</Typography>
+      <List>
         {blog.comments.map((comment) => (
-          <h6 key={comment.id}>{ comment.content }</h6>
+          <ListItem key={comment.id}>{ comment.content }</ListItem>
         ))}
-      </div>
-    </div>
+      </List>
+    </Paper>
   )
 }
