@@ -1,16 +1,18 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
-import { Button } from '@material-ui/core'
-
+import { Button, Toolbar, AppBar, Typography } from '@material-ui/core'
+import { makeStyles } from '@material-ui/styles'
+import { useSnackbar } from 'notistack'
 
 import { logoutUser } from '../reducers/userReducer'
 
-// const useStyles = makeStyles({
-//   userNameNav: {
-//     flex: 1,
-//   },
-// })
+const useStyles = makeStyles({
+  NavBarStyle: {
+    flex: 1,
+    textAlign: 'end'
+  },
+})
 
 const LoginBtn = () => {
   const history = useHistory()
@@ -26,13 +28,15 @@ const LoginBtn = () => {
   )
 }
 
-const LogoutBtn = () => {
+const LogoutBtn = ({ user }) => {
   const history = useHistory()
   const dispatch = useDispatch()
+  const { enqueueSnackbar } = useSnackbar()
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
     dispatch(logoutUser())
+    enqueueSnackbar(`${user.username} logged out..`, { variant: 'success' })
     history.push('/')
   }
 
@@ -44,14 +48,12 @@ const LogoutBtn = () => {
 }
 
 const NavBar = () => {
+  const classes = useStyles()
   const user = useSelector((state) => state.user)
 
   return (
-    <div>
-      <div>
-        {user ? (
-          <h1>{user.name}</h1>
-        ) : null}
+    <AppBar position="static">
+      <Toolbar>
         <Button color="inherit" component={Link} to="/">
           Blog
         </Button>
@@ -65,9 +67,12 @@ const NavBar = () => {
             Users
           </Button>
         )}
-        {user ? <LogoutBtn /> : <LoginBtn />}
-      </div>
-    </div>
+        {user ? <LogoutBtn user={ user } /> : <LoginBtn />}
+        {user ? (
+          <Typography className={classes.NavBarStyle}>{user.name}</Typography>
+        ) : null}
+      </Toolbar>
+    </AppBar>
   )
 }
 
