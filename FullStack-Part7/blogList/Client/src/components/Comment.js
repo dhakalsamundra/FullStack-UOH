@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { commentBlog } from '../reducers/blogReducer'
 import { useFeild } from '../hooks'
 import { setNotification } from '../reducers/notificationReducer'
+import { TextField } from '@material-ui/core'
 
 const Comment = ({ blog }) => {
   const dispatch = useDispatch()
@@ -24,7 +25,7 @@ const Comment = ({ blog }) => {
   return(
     <div>
       <form onSubmit={handleSubmit}>
-        <input value={ comment } { ...setComment } placeholder='Comment here' />
+        <TextField value={ comment } { ...setComment } placeholder='Comment here' />
       </form>
     </div>
   )
