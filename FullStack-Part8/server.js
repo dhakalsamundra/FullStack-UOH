@@ -85,61 +85,63 @@ let books = [
 ]
 
 const typeDefs = gql`
-  type Author {
-      name: String!
-      born: Int
-      bookCount: Int!
-      id: ID!
-  }
-  type Genres {
-      name: String!
-  }
+
   type Book {
-      title: String!
-      published: String!
-      author: String!
-      genres: [Genres!]!
-      id: ID!
-  }
-  type Query {
-      bookCount: Int!
-      authorCount: Int!
-      allBooks: [Book!]!
-      allAuthors: [Author!]!
-      findBook(name: String!):Book
-  }
-  type Mutation {
-      addBook(
-        title: String!
-        published: String!
-        author: [String!]!
-        genres: [String!]!
-      ): Book
-      editAuthor(name: String!, born: Int): Author
+    title: String!
+    published: Int!
+    author: String!
+    genres: [String!]!
+    id: ID!
   }
 
-`
+  type Author {
+    name: String!
+    id: ID!
+    born: Int
+    bookCount: Int
+  }
+
+  type Query {
+    allBooks(author: String, genre: String): [Book!]!
+    allAuthors(name: String): [Author!]!
+    bookCount: Int!
+    authorCount: Int!
+  }
+
+  type Mutation {
+    addBook(
+      title: String!
+      author: String
+      published: Int!
+      genres: [String!]!
+    ): Book
+    editAuthor(name: String!, setBornTo: Int!): Author
+  }
+`;
 
 const resolvers = {
   Query: {
-      authorCount: () =>persons.length,
-      bookCount: () => books.length,
-      allAuthors: () => persons,
+      
+      allAuthors: () => authors,
       allBooks: () => books,
-      findBook: (root, args) => books.find(b => b.name === args.name)
+      authorCount: () =>authors.length,
+      bookCount: () => books.length
   },
   Author: {
-      bookCount: (root)=> {
-          const books = Book.find({ author: root.id })
-          return books.length
-      }
+    bookCount: async (root) => {
+        const countBook = await books.find({ author: root.name})
+        if(countBook){
+            return countBook.length()
+
+        }
+    }
   },
   Mutation: {
       addBook: ( root, args ) => {
-          if ( books.find(b => b.name === args.name)){
+          if ( books.find(b => b.title === args.title)){
               throw new UserInputError('Name must be unique', { invalidArgs: args.name })
           }
-           const book = { ...args, id: uuid() }
+           const book = { ...args }
            books = books.concat(book)
            return book
       },
