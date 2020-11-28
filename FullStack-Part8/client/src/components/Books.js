@@ -28,7 +28,7 @@ const Persons = ({ show }) => {
             <tr key={a.id}>
               <td>{a.title}</td>
               <td>{a.published}</td>
-              <td>{a.name}</td>
+              <td>{a.author.name}</td>
             </tr>
           ))}
         </tbody>
