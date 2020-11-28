@@ -128,16 +128,14 @@ const resolvers = {
       bookCount: () => books.length
   },
   Author: {
-    bookCount: async (root) => {
-        const countBook = await books.find({ author: root.name})
-        if(countBook){
+    bookCount: async root => {
+        const countBook = await books.find({ author: root.id})
             return countBook.length()
-
-        }
     }
   },
   Mutation: {
-      addBook: ( root, args ) => {
+      addBook: async( root, args ) => {
+        const { title, published, author, genres } = args
           if ( books.find(b => b.title === args.title)){
               throw new UserInputError('Name must be unique', { invalidArgs: args.name })
           }
