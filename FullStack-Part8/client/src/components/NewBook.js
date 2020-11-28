@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useLazyQuery, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 
 import { ALL_AUTHORS, CREATE_BOOK, ALL_BOOKS } from '../queries'
 
