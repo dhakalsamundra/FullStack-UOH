@@ -1,5 +1,9 @@
-const { ApolloServer, gql, UserInputError } = require('apollo-server')
-const { v4: uuidv4 } = require('uuid');
+const { ApolloServer } = require('apollo-server')
+const mongoose = require('mongoose')
+
+const config = require('./utils/config')
+const typeDefs = require('./typeDefs')
+const resolvers = require('./resolvers')
 
 let authors = [
   {
@@ -84,76 +88,14 @@ let books = [
   },
 ]
 
-const typeDefs = gql`
-
-  type Book {
-    title: String!
-    published: Int!
-    author: String!
-    genres: [String!]!
-    id: ID!
-  }
-
-  type Author {
-    name: String!
-    id: ID!
-    born: Int
-    bookCount: Int
-  }
-
-  type Query {
-    allBooks(author: String, genre: String): [Book!]!
-    allAuthors(name: String): [Author!]!
-    bookCount: Int!
-    authorCount: Int!
-  }
-
-  type Mutation {
-    addBook(
-      title: String!
-      author: String
-      published: Int!
-      genres: [String!]!
-    ): Book
-    editAuthor(name: String!, setBornTo: Int!): Author
-  }
-`;
-
-const resolvers = {
-  Query: {
-      
-      allAuthors: () => authors,
-      allBooks: () => books,
-      authorCount: () =>authors.length,
-      bookCount: () => books.length
-  },
-  Author: {
-    bookCount: async root => {
-        const countBook = await books.find({ author: root.id})
-            return countBook.length()
-    }
-  },
-  Mutation: {
-      addBook: async( root, args ) => {
-        const { title, published, author, genres } = args
-          if ( books.find(b => b.title === args.title)){
-              throw new UserInputError('Name must be unique', { invalidArgs: args.name })
-          }
-           const book = { ...args }
-           books = books.concat(book)
-           return book
-      },
-      editAuthor: (root, args ) => {
-          const author = authors.find(a => a.name === args.name)
-          if(!author){
-              return null
-          }
-          const updatedAuthor = { ... author, born: args.born }
-          authors = authors.map(a => a.name === args.name ? updatedAuthor : a)
-          return updatedAuthor
-      }
-  }
-}
+mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true,
+  useCreateIndex: true, useFindAndModify: false,  })
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connection to MongoDB:', error.message)
+  })
 
 const server = new ApolloServer({
   typeDefs,
