@@ -7,8 +7,9 @@ import { ALL_AUTHORS, CREATE_BOOK, ALL_BOOKS } from '../queries'
 const NewBook = ({ show}) => {
 
 
-  const [createBook, { loading }] = useMutation(CREATE_BOOK, {
+  const [createBook] = useMutation(CREATE_BOOK, {
     refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }],
+    
 
   })
 
