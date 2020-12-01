@@ -15,6 +15,7 @@ const Book = ({ show }) => {
     return <div><Spinner /></div>
   }
   const books = result.data.allBooks
+  
   const filteredBook = () => {
     if(filter === 'reset') return books
     else if (filter === '') return books
