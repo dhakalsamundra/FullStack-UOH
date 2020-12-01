@@ -1,4 +1,4 @@
-const { UserInputError } = require("apollo-server");
+const { UserInputError, AuthenticationError } = require("apollo-server");
 const jwt = require('jsonwebtoken')
 
 const Author = require("./models/Author");
@@ -17,9 +17,7 @@ const findOrCreateAuthor = async (name) => {
 module.exports = {
     Query: {
       
-        allAuthors: async() => {
-            return await Author.find({})
-        },
+        allAuthors: async() =>  Author.find({}),
         allBooks: (root, args) => {
             if (!args.genre) {
               return Book.find({}).populate('author')
@@ -49,13 +47,19 @@ module.exports = {
                 throw new UserInputError(error.message, { error });
               } 
         },
-        editAuthor: async(root, args,  ) => {
-            const author = await Author.findOne({ name: args.name });
-            if(!author){
-                throw new UserInputError("Invalid Author");
-            }
-            const updatedAuthor = { ... author, born: args.born }
-            return updatedAuthor
+        editAuthor: async (root, args) => {
+          const { name, setBornTo } = args
+          if (setBornTo === '') {
+            throw new UserInputError('You left a field empty', {
+              invalidArgs: args
+            })
+          }
+          const filter = { name }
+          const update = { born: setBornTo }
+          const updatedAuthor = await Author.findOneAndUpdate(filter, update, {
+            new: true
+          })
+          return updatedAuthor
         },
         createUser: async (root, args) => {
           try {
