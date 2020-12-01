@@ -1,10 +1,15 @@
-import React from 'react'
-import { useQuery } from '@apollo/client';
+import React, { useState } from 'react'
+import { useQuery, useMutation } from '@apollo/client';
+import Select from 'react-select'
 
-import { ALL_AUTHORS } from '../queries'
+import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 import Spinner from './Spinner';
 
-const Authors = ({ show }) => {
+const Authors = ({ show, token }) => {
+  const [name, setName] = useState('')
+  const [year, setYear] = useState('')
+
+  const [ editBirth ] = useMutation(EDIT_AUTHOR)
   const result = useQuery(ALL_AUTHORS)
 
   if (!show) {
@@ -14,6 +19,22 @@ const Authors = ({ show }) => {
     return <div><Spinner /></div>
   }
   const authors = result.data.allAuthors
+
+  const options = authors.map(a => {
+    return { value: a.name, label: a.name}
+  })
+  const handleChange = selectedOption => {
+    setName(selectedOption.value)
+  }
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    setName('')
+    setYear('')
+    await editBirth({
+      variables: { name, year:Number(year)}
+    })
+  }
     return (
       <div>
       <h2>authors</h2>
@@ -33,6 +54,21 @@ const Authors = ({ show }) => {
           ))}
         </tbody>
       </table>
+      { token ? (
+        <div>
+          <p>Add Birth Date</p>
+          <form onSubmit={onSubmit}>
+            <div>
+              <Select isSearchable onChange={handleChange} options={options} />
+            </div>
+            <div>
+              Birth Date
+              <input value={year} onChange={({ target }) => setYear(target.value)} />
+            </div>
+            <button type='submit'>Add Year</button>
+          </form>
+        </div>
+      ) : null }
     </div>
     )
   }
