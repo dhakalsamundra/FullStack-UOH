@@ -10,7 +10,8 @@ import LogIn from './components/LoginForm'
 const App = () => {
   const client = useApolloClient()
   const [page, setPage] = useState('authors')
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(null)
+  
 
   useEffect(() => {
     const userToken = localStorage.getItem("user");
