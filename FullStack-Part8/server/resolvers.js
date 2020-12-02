@@ -66,7 +66,7 @@ module.exports = {
             throw new UserInputError('Invalid Credentials..')
           }
           return {
-            value: jwt.sign({ username: user.username, id: user._id }, JWT_SECRET)
+            value: jwt.sign({ username: user.username, genre: user.favoriteGenre, id: user._id }, JWT_SECRET)
           }
         }
     }
