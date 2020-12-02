@@ -49,17 +49,9 @@ module.exports = {
         },
         editAuthor: async (root, args) => {
           const { name, setBornTo } = args
-          if (setBornTo === '') {
-            throw new UserInputError('You left a field empty', {
-              invalidArgs: args
-            })
-          }
-          const filter = { name }
-          const update = { born: setBornTo }
-          const updatedAuthor = await Author.findOneAndUpdate(filter, update, {
-            new: true
-          })
-          return updatedAuthor
+          let author = await Author.findOne({ name: name })
+          author.born = setBornTo
+          return author.save()
         },
         createUser: async (root, args) => {
           try {
