@@ -15,7 +15,7 @@ const Book = ({ show }) => {
     return <div><Spinner /></div>
   }
   const books = result.data.allBooks
-  
+
   const filteredBook = () => {
     if(filter === 'reset') return books
     else if (filter === '') return books
@@ -24,9 +24,9 @@ const Book = ({ show }) => {
   }
 
   const genres = () => {
-    const samundra = books.map(b=> b.genres)
-    const sam = [ ...samundra].flat()
-      return sam
+    let genreArray = books.map(b=> b.genres)
+     genreArray = [ ...genreArray].flat()
+      return genreArray
   }
   const handleFilter = (genre) => {
     setFilter(genre)
@@ -45,7 +45,6 @@ const Book = ({ show }) => {
             <tr key={b.id}>
               <td>{b.title}</td>
               <td>{b.published}</td>
-              <td>{b.author.name}</td>
             </tr>
           ))}
         </tbody>
