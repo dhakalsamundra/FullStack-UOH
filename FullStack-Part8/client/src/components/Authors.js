@@ -5,11 +5,13 @@ import Select from 'react-select'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 import Spinner from './Spinner';
 
-const Authors = ({ show, token }) => {
+const Authors = ({ show, token, notify }) => {
   const [name, setName] = useState('')
   const [year, setYear] = useState('')
 
-  const [ editBirth ] = useMutation(EDIT_AUTHOR)
+  const [ editBirth ] = useMutation(EDIT_AUTHOR, {
+    onError: (error) => notify(error.message)
+  })
   const result = useQuery(ALL_AUTHORS)
 
   if (!show) {
