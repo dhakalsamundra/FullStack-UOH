@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from "@apollo/client";
 
 import Authors from './components/Authors'
 import Books from './components/Books'
@@ -7,11 +7,19 @@ import NewBook from './components/NewBook'
 import Recommendation from './components/Recommendation'
 import LogIn from './components/LoginForm'
 
+
+const Notify = ({ errorMessage }) => {
+  if ( !errorMessage ) {
+    return null
+  }
+  return <div style={{ color: "red"}}>{errorMessage}</div>
+}
+
 const App = () => {
-  const client = useApolloClient()
+  const client = useApolloClient();
   const [page, setPage] = useState('authors')
-  const [token, setToken] = useState(null)
-  
+  const [token, setToken] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     const userToken = localStorage.getItem("user");
@@ -25,12 +33,20 @@ const App = () => {
       localStorage.clear();
       setPage('authors');
       client.resetStore()
-
     };
+
+
+  const notify = (message) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, 5000);
+  };
 
   return (
     <div>
       <div>
+        <Notify errorMessage={errorMessage} />
         <button onClick={() => setPage('authors')}>Authors</button>
         <button onClick={() => setPage('books')}>Books</button>
         {token ? (
@@ -45,11 +61,11 @@ const App = () => {
 
       </div>
 
-      <Authors show={page === 'authors'} token={token} />
+      <Authors show={page === 'authors'} token={token} notify={notify} />
       <Books show={page === 'books'} />
-      <NewBook show={page === 'add'} />
+      <NewBook show={page === 'add'} notify={notify} />
       <Recommendation show={page==='recommend'} />
-      <LogIn show={page==='login'} setToken ={setToken} setPage={setPage} />
+      <LogIn show={page==='login'} setToken ={setToken} setPage={setPage} notify={notify} />
 
     </div>
   )
