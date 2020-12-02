@@ -1,5 +1,6 @@
 const { UserInputError, AuthenticationError } = require("apollo-server");
 const jwt = require('jsonwebtoken')
+const { PubSub } = require('apollo-server')
 
 const Author = require("./models/Author");
 const Book = require("./models/Book");
@@ -13,6 +14,8 @@ const findOrCreateAuthor = async (name) => {
   }
   return author;
 };
+
+const pubsub = new PubSub()
 
 module.exports = {
     Query: {
@@ -69,5 +72,10 @@ module.exports = {
             value: jwt.sign({ username: user.username, genre: user.favoriteGenre, id: user._id }, JWT_SECRET)
           }
         }
+    },
+    Subscription: {
+      bookAdded: {
+        subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
+      }
     }
 }
