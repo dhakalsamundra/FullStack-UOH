@@ -2,8 +2,6 @@ interface BmiCalc {
   weight: number,
   height: number
 }
-type bmi = (queryweight: any, queryheight: any) => string;
-
 const parseArguments = ( weight: number, height: number): BmiCalc => {
   if (!weight || !height) throw new Error("required fields missing");
 
@@ -13,19 +11,26 @@ const parseArguments = ( weight: number, height: number): BmiCalc => {
 
   return { weight: Number(weight), height: Number(height) };
 }
-export const bmiCalc: bmi = (queryweight, queryheight) => {
-  const { weight, height } = parseArguments(queryweight, queryheight)
-  const bmi = weight/Math.pow(height, 2)
+export const bmiCalc = (kg: number, cm: number) => {
+  const { weight, height } = parseArguments(kg, cm)
+  const bmi = (weight / Math.pow(height, 2)) * 10000;
+  console.log(bmi)
   switch (true) {
-    case bmi <= 18.5:
-      return "underweight ";
-    case bmi <= 25:
-      return "Normal(Healthy weight)";
-    case bmi <= 30:
+    case (bmi <= 15):
+      return "very severly underweight";
+    case (bmi>= 15 && bmi < 18.5):
+      return "severely underweight";
+    case (bmi>= 18.5 && bmi <= 24.9):
+      return "Normal (healthy weight)";
+    case (bmi>= 25 && bmi <= 29.9):
       return "Overweight";
+    case (bmi>= 30 && bmi <= 34.9):
+      return "Obese Classs I (Moderately obese)";
+    case (bmi >= 35 && bmi <= 39.9):
+      return "Obese Classs II (Severely obese)";
     default:
-      return "too much overWeight";
+      return "Obese Classs III (very severely obese)";
   }
 }
 
-console.log(bmiCalc(180, 74))
+console.log(bmiCalc(74, 180))
