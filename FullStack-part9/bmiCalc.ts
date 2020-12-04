@@ -3,10 +3,10 @@ interface BmiCalc {
   height: number
 }
 
-type bmi = (weight: any, height: any) => BmiCalc
+type bmi = (weight: number, height: number) => BmiCalc
 type bmiType = (weight: any, height: any) => string
 
-const parseArguments: bmi = ( weight: any, height: any): BmiCalc => {
+const parseArguments: bmi = ( weight: number, height: number): BmiCalc => {
   if (!weight || !height) throw new Error("required fields missing");
 
   if (isNaN(Number(weight)) || isNaN(Number(height))) {
@@ -18,7 +18,7 @@ const parseArguments: bmi = ( weight: any, height: any): BmiCalc => {
 export const bmiCalc: bmiType = (kg: number, cm: number) => {
   const { weight, height } = parseArguments(kg, cm)
   const bmi = (weight / Math.pow(height, 2)) * 10000;
-  console.log(bmi)
+  // console.log(bmi)
   switch (true) {
     case (bmi <= 15):
       return "very severly underweight";
@@ -36,5 +36,3 @@ export const bmiCalc: bmiType = (kg: number, cm: number) => {
       return "Obese Classs III (very severely obese)";
   }
 }
-
-console.log(bmiCalc(74, 180))
