@@ -18,9 +18,9 @@ export const exerciseCalc = ( arrayOfHour: Array<number>, target: number): exerc
     
     const totalHours = arrayOfHour.reduce((acc, cur) => acc + cur)
     const periodLength = arrayOfHour.length
-    const success = totalHours > target ? true : false
-    const trainingDays = arrayOfHour.filter((hour) => hour).length
-    const average = totalHours/trainingDays
+    const trainingDays = arrayOfHour.filter((hour) => hour !== 0).length
+    const average = totalHours/periodLength
+    const success = average > target ? true : false
     const rating = success ? 2 : 1
     const ratingDescription = rating === 1 ? 'not too bad but could be better' : 'Good but it can be even better'
 
@@ -29,5 +29,3 @@ export const exerciseCalc = ( arrayOfHour: Array<number>, target: number): exerc
     }
 
 }
-
-console.log(exerciseCalc([3, 0, 2, 4.5, 0, 3, 1], 10))
