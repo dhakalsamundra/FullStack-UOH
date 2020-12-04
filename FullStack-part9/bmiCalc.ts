@@ -2,7 +2,11 @@ interface BmiCalc {
   weight: number,
   height: number
 }
-const parseArguments = ( weight: number, height: number): BmiCalc => {
+
+type bmi = (weight: any, height: any) => BmiCalc
+type bmiType = (weight: any, height: any) => string
+
+const parseArguments: bmi = ( weight: any, height: any): BmiCalc => {
   if (!weight || !height) throw new Error("required fields missing");
 
   if (isNaN(Number(weight)) || isNaN(Number(height))) {
@@ -11,7 +15,7 @@ const parseArguments = ( weight: number, height: number): BmiCalc => {
 
   return { weight: Number(weight), height: Number(height) };
 }
-export const bmiCalc = (kg: number, cm: number) => {
+export const bmiCalc: bmiType = (kg: number, cm: number) => {
   const { weight, height } = parseArguments(kg, cm)
   const bmi = (weight / Math.pow(height, 2)) * 10000;
   console.log(bmi)
