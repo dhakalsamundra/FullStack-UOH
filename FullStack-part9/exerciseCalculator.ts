@@ -20,9 +20,9 @@ export const exerciseCalc = ( arrayOfHour: Array<number>, target: number): exerc
     const periodLength = arrayOfHour.length
     const trainingDays = arrayOfHour.filter((hour) => hour !== 0).length
     const average = totalHours/periodLength
-    const success = average > target ? true : false
-    const rating = success ? 2 : 1
-    const ratingDescription = rating === 1 ? 'not too bad but could be better' : 'Good but it can be even better'
+    const success = average >= target ? true : false
+    const rating = (average < target) ? 1 : (average === target) ? 2 : 3
+    const ratingDescription = rating === 1 ? 'too bad' : rating === 2 ? 'Good but it can be even better' : "Outstanding"
 
     return{
         target, periodLength, success, average, rating, ratingDescription, trainingDays
