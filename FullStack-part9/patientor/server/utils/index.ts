@@ -1,5 +1,5 @@
 import { text } from 'express'
-import { NewPatient, Gender } from '../types'
+import { NewPatient, Gender, Entry } from '../types'
 
 const isString = (text: any): text is string => {
     return typeof text === 'string' || text instanceof String
@@ -28,6 +28,9 @@ const parseGender = (gender: any): Gender => {
     }
     return gender
 }
+const parseEntries = (entries: any): Entry => {
+    return entries
+}
 
 const toNewPatientEntry = (object: any): NewPatient => {
     return {
@@ -35,7 +38,8 @@ const toNewPatientEntry = (object: any): NewPatient => {
         gender: parseGender(object.gender),
         name: parseString(object.name),
         occupation: parseString(object.occupation),
-        ssn: parseString(object.ssn)
+        ssn: parseString(object.ssn),
+        entries: parseEntries(object.entries)
     }
 }
 
