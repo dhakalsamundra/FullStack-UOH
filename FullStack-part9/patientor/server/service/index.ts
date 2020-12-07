@@ -10,7 +10,7 @@ const getDiagnosesData = (): Array<diagnoses> => {
 }
 
 const getPatientsData = (): Array<nonSensitiveEntries> => {
-    return getData.map((data) => _.omit(data, 'ssn'));
+    return getData
   };
 
 const addPatientsData = ( newEntry: NewPatient ) : nonSensitiveEntries => {
