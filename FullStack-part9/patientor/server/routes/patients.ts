@@ -20,4 +20,15 @@ router.post('/', (req, res) => {
     }
 })
 
+router.get('/:id', (req, res) => {
+    try {
+        const { id } = req.params
+        const getData = service.getPatientsData()
+        const patient = getData.find(d => d.id = id)
+        res.status(200).send(patient)
+    } catch (e) {
+        res.status(500).send({ error: e.message})
+    }
+})
+
 export default router
