@@ -17,7 +17,7 @@ const App = () => {
     setScore(newValue);
   };
   const totalScore = good + bad + neutral
-  const averageSore = totalScore/ 3
+  const averageSore = (good - bad)/ totalScore
   const percentagePositive = (good / totalScore ) * 100 + '%'
   return (
     <div>
