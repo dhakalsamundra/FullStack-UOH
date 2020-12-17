@@ -21,19 +21,17 @@ const create = async (newObject) => {
 }
 
 const remove = async (removeObject) => {
-  console.log('this is service delte', removeObject)
   const id = removeObject.id
   const config = {
     headers: { Authorization: token },
   }
-  const response = await axios.delete(baseUrl.concat(`/${id}`), config)
+  const response = await axios.delete(baseUrl + `/${id}`, config)
   return response.data
 }
 
 const update = async (newObject) => {
-  newObject = { ...newObject, user: newObject.user.id }
   const id = newObject.id
-  const response = await axios.put(baseUrl.concat(`/${id}`), newObject)
+  const response = await axios.put(baseUrl + `/${id}`, newObject)
   return response.data
 }
 export default { getAll, setToken, create, update, remove }
