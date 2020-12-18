@@ -54,7 +54,7 @@ const App = () => {
   }
 
   const addNewBlog = async (newBlog) => {
-    blogFormRef.current.toggleVisible()
+    // blogFormRef.current.toggleVisible()
     try {
       const returnedBlog = await blogService.create(newBlog)
       const message = `${returnedBlog.title} by ${returnedBlog.author} successfully added`
