@@ -14,7 +14,7 @@ blogRouter.post('/', async (req, res) => {
   const data = req.body
 
   if(data.title === undefined || data.url === undefined || data.title.length<5) {
-    return res.status(400).json({ error: 'Title length must be minimum of 5 character.' })
+    res.status(400).send({ error: 'Not authorized' })
   } else {
     const decodedToken = jwt.verify(req.token, process.env.SECRET)
     if (!req.token || !decodedToken.id) {

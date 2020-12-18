@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function EachBlog({ blog, addLikes, handleDelete }) {
+export default function EachBlog({ blog, user, addLikes, handleDelete }) {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -23,7 +23,8 @@ export default function EachBlog({ blog, addLikes, handleDelete }) {
         <li>Title: {blog.title}</li>
         <li>Author: {blog.author}</li>
       </ul>
-      <button onClick={() => handleDelete(blog)}>Delete</button>
+      { user ?  (
+        <button onClick={() => handleDelete(blog)}>Delete</button>): null }
     </div>
   )
 }

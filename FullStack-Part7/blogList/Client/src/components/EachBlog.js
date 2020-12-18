@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { Typography, Paper, List, ListItem, IconButton } from '@material-ui/core'
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt'
@@ -14,6 +14,8 @@ export default function EachBlog({ blog }) {
   const dispatch = useDispatch()
   const history = useHistory()
   const { enqueueSnackbar } = useSnackbar()
+  const user = useSelector((state) => state.user)
+
 
 
   const handleDeleteBlog = async () => {
@@ -59,7 +61,7 @@ export default function EachBlog({ blog }) {
         <Typography variant='h4' color='textSecondary'>
           Added By:{blog.user.name}
         </Typography>
-        <IconButton onClick={() => handleDeleteBlog(blog)} aria-label='like Button'><DeleteIcon /></IconButton>
+        { user ? <IconButton onClick={() => handleDeleteBlog(blog)} aria-label='like Button'><DeleteIcon /></IconButton> : null }
         <IconButton onClick={() => addLike(blog)} aria-label='delete blog'><ThumbUpAltIcon /></IconButton>
         <Comment blog={blog} />
       </div>

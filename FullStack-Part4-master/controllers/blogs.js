@@ -14,7 +14,10 @@ blogRouter.post('/', async (req, res) => {
 
   if(data.title === undefined && data.url === undefined) {
     return res.status(400).end()
-  } else {
+  } else if(data.title.length < 3) {
+    return res.status(400).json({ error: 'Length must be atlest 3' })
+  }
+  else {
     const decodedToken = jwt.verify(req.token, process.env.SECRET)
     if (!req.token || !decodedToken.id) {
       return res.status(401).json({ error: 'token missing or invalid' })
