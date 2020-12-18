@@ -28,8 +28,8 @@ export default function Login() {
 
   const handleLogIn = async (event) => {
     event.preventDefault()
-    setUserName.clear()
-    setPassword.clear()
+    setUserName.clear('')
+    setPassword.clear('')
     try {
       await dispatch(loginUser({ username, password }))
       enqueueSnackbar(`${username} logged in..`, { variant: 'success' })
@@ -44,8 +44,8 @@ export default function Login() {
     <div>
       <h1>Login</h1>
       <form onSubmit={handleLogIn}>
-        <TextField value={username} { ...setUserName} placeholder='UserName' /><br/>
-        <TextField value={password} { ...setPassword} placeholder='Password' /><br/>
+        <TextField value={username} { ...setUserName} placeholder='UserName' clear={username.clear} /><br/>
+        <TextField value={password} { ...setPassword} placeholder='Password' clear={password.clear} /><br/>
         <Button className={classes.btnStyle} type='submit' color='primary' variant='contained'>
           SignIn
         </Button>

@@ -25,7 +25,7 @@ const Comment = ({ blog }) => {
   return(
     <div>
       <form onSubmit={handleSubmit}>
-        <TextField value={ comment } { ...setComment } placeholder='Comment here' />
+        <TextField value={ comment } { ...setComment } placeholder='Comment here' clear={comment.clear} />
       </form>
     </div>
   )

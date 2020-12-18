@@ -67,8 +67,8 @@ export default function EachBlog({ blog }) {
       </div>
       <Typography variant='h5' color='primary'>Comments</Typography>
       <List>
-        {blog.comments.map((comment) => (
-          <ListItem key={comment.id}>{ comment.content }</ListItem>
+        {blog.comments.map((comment, id) => (
+          <ListItem key={id}>{ comment.content }</ListItem>
         ))}
       </List>
     </Paper>

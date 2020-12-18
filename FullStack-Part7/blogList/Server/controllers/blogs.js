@@ -62,24 +62,19 @@ blogRouter.post('/:id/comments', async (req, res) => {
 
   if (!blog) {
     return res.send({ message: 'not found' })
-  } else {
-    const decodedToken = jwt.verify(req.token, process.env.SECRET)
-    if (!req.token || !decodedToken.id) {
-      return res.status(401).json({ error: 'token missing or invalid' })
-    }
+  }
+  blog.comments = blog.comments.concat({ content })
 
-    blog.comments = blog.comments.concat({ content })
+  const savedBlog = await blog.save()
+  const populatedBlog = await savedBlog
+    .populate('user', {
+      username: 1,
+      name: 1,
+    })
+    .execPopulate()
 
-    const savedBlog = await blog.save()
-    const populatedBlog = await savedBlog
-      .populate('user', {
-        username: 1,
-        name: 1,
-      })
-      .execPopulate()
-
-    res.status(201).send(populatedBlog)
-  }})
+  res.status(201).send(populatedBlog)
+})
 
 blogRouter.delete('/:id', async (req, res) => {
   const blog = await Blog.findById(req.params.id)
